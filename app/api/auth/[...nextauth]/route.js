@@ -38,7 +38,13 @@ const authOptions = {
         });
 
         if (doctor && doctor.password === credentials.password) {
-          return { id: doctor.id, name: doctor.username, role: "doctor" };
+          return {
+            id: doctor.id,
+            name: doctor.username,
+            role: "doctor",
+            firstname: doctor.firstname,
+            lastname: doctor.lastname,
+          };
         }
         return null;
       },
@@ -48,11 +54,17 @@ const authOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role;
+        token.firstname = user.firstname;
+        token.lastname = user.lastname;
       }
+      console.log("Callback token:", token);
+      console.log("Callback user:", user);
       return token;
     },
     async session({ session, token }) {
       session.user.role = token.role;
+      session.user.firstname = token.firstname;
+      session.user.lastname = token.lastname;
       return session;
     },
   },
