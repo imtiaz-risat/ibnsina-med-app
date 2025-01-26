@@ -5,7 +5,7 @@ import NewPatientForm from "./newPatientForm";
 const RegisterPage = () => {
   const addPatient = async (patientData) => {
     try {
-      const response = await fetch("/api/addPatient", {
+      const response = await fetch("/api/doctor/addPatient", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
