@@ -1,6 +1,6 @@
 export function SearchBox({ onSearch }) {
   return (
-    <div className="w-full max-w-lg">
+    <div className="w-full flex-1">
       <input
         type="text"
         placeholder="Search patients by id, name, phone or note..."

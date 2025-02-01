@@ -43,7 +43,7 @@ export function FilterSidebar({
   };
 
   return (
-    <div className="w-full md:w-64 bg-white p-4 border border-gray-200 rounded-lg">
+    <div className="w-full md:w-64 bg-white p-4 border border-gray-200 rounded-md">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-2">
           <Filter className="w-4 h-4 text-gray-900" />
@@ -62,7 +62,7 @@ export function FilterSidebar({
 
       <div className="space-y-4">
         {Object.entries(filterOptions).map(([sectionId, section]) => (
-          <div key={sectionId} className="border-b border-gray-200 pb-4">
+          <div key={sectionId} className="border-b border-gray-200 pb-2">
             <button
               onClick={() => toggleSection(sectionId)}
               className="flex justify-between items-center w-full py-2 text-left font-medium"
@@ -76,7 +76,7 @@ export function FilterSidebar({
             </button>
 
             {expandedSections.has(sectionId) && (
-              <div className="mt-2 space-y-2">
+              <div className="mt-2 space-y-1">
                 {section.options.map((option) => (
                   <label
                     key={option.id}

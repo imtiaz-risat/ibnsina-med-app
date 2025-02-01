@@ -16,7 +16,7 @@ export function Pagination({
         <select
           value={perPage}
           onChange={(e) => onPerPageChange(Number(e.target.value))}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500"
         >
           <option value="10">10 per page</option>
           <option value="20">20 per page</option>
@@ -37,7 +37,7 @@ export function Pagination({
             onClick={() => onPageChange(page)}
             className={`w-8 h-8 ${
               currentPage === page
-                ? "bg-blue-500 text-white"
+                ? "bg-gray-500 text-white"
                 : "bg-white text-gray-700"
             } border border-gray-300 rounded-md`}
           >
