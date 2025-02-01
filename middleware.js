@@ -5,7 +5,7 @@ export async function middleware(req) {
   const token = await getToken({ req });
   const url = req.nextUrl.clone();
 
-  console.log("Middleware token: ", token);
+  // console.log("Middleware token: ", token);
 
   if (url.pathname.startsWith("/admin") && (!token || token.role !== "admin")) {
     url.pathname = "/login/admin";
