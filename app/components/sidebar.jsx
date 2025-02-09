@@ -12,7 +12,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   return (
     <motion.nav
       layout
-      className="fixed h-screen shrink-0 border-r border-slate-300 bg-white transition-width duration-400 ease-in-out"
+      className="fixed z-20 h-screen shrink-0 border-r border-slate-300 bg-white transition-width duration-400 ease-in-out"
       style={{
         width: isOpen ? "200px" : "50px",
       }}
