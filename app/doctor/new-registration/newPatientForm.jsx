@@ -48,7 +48,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="peer w-full border-2 px-2 border-gray-300 placeholder-transparent focus:ring-0 focus:border-blue-500 transition-colors bg-transparent py-2.5"
+                className="peer w-full border px-2 border-gray-300 placeholder-transparent   transition-colors bg-transparent py-2.5"
                 placeholder="Patient Name"
               />
               <label
@@ -67,7 +67,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 value={formData.dateOfBirth}
                 onChange={handleChange}
                 required
-                className="peer w-full border-2 px-2 border-gray-300 placeholder-transparent focus:ring-0 focus:border-blue-500 transition-colors bg-transparent py-2.5"
+                className="peer w-full border px-2 border-gray-300 placeholder-transparent   transition-colors bg-transparent py-2.5"
               />
               <label
                 htmlFor="dateOfBirth"
@@ -86,7 +86,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 id="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="w-full border-2 border-gray-300 px-2 focus:ring-0 focus:border-blue-500 transition-colors bg-transparent py-2.5 appearance-none cursor-pointer"
+                className="w-full border border-gray-300 px-2   transition-colors bg-transparent py-2.5 appearance-none cursor-pointer"
               >
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -106,7 +106,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 id="maritalStatus"
                 value={formData.maritalStatus}
                 onChange={handleChange}
-                className="w-full border-2 border-gray-300 px-2 focus:ring-0 focus:border-blue-500 transition-colors bg-transparent py-2.5 appearance-none cursor-pointer"
+                className="w-full border border-gray-300 px-2   transition-colors bg-transparent py-2.5 appearance-none cursor-pointer"
               >
                 <option value="Single">Single</option>
                 <option value="Married">Married</option>
@@ -132,7 +132,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 value={formData.district}
                 onChange={handleChange}
                 required
-                className=" peer w-full border-2 px-2 border-gray-300 placeholder-transparent focus:ring-0 focus:border-blue-500 transition-colors bg-transparent py-2.5"
+                className=" peer w-full border px-2 border-gray-300 placeholder-transparent transition-colors bg-transparent py-2.5"
                 placeholder="District"
               />
               <label
@@ -151,7 +151,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 value={formData.occupation}
                 onChange={handleChange}
                 required
-                className="peer w-full border-2 px-2 border-gray-300 placeholder-transparent focus:ring-0 focus:border-blue-500 transition-colors bg-transparent py-2.5"
+                className="peer w-full border px-2 border-gray-300 placeholder-transparent transition-colors bg-transparent py-2.5"
                 placeholder="Occupation"
               />
               <label
@@ -172,7 +172,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 id="refBy"
                 value={formData.refBy}
                 onChange={handleChange}
-                className="peer w-full border-2 px-2 border-gray-300 placeholder-transparent focus:ring-0 focus:border-blue-500 transition-colors bg-transparent py-2.5"
+                className="peer w-full border px-2 border-gray-300 placeholder-transparent   transition-colors bg-transparent py-2.5"
                 placeholder="Referred By"
               />
               <label
@@ -191,7 +191,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                className="peer w-full border-2 px-2 border-gray-300 placeholder-transparent focus:ring-0 focus:border-blue-500 transition-colors bg-transparent py-2.5"
+                className="peer w-full border px-2 border-gray-300 placeholder-transparent   transition-colors bg-transparent py-2.5"
                 placeholder="Phone Number"
               />
               <label
@@ -211,7 +211,7 @@ const NewPatientForm = ({ onSubmit }) => {
               value={formData.note}
               onChange={handleChange}
               rows="4"
-              className="peer w-full border-2 border-gray-300 placeholder-transparent focus:ring-0 focus:border-blue-500 transition-colors bg-transparent p-4 resize-none"
+              className="peer w-full border border-gray-300 placeholder-transparent   transition-colors bg-transparent p-4 resize-none"
               placeholder="Additional Notes"
             ></textarea>
             <label
