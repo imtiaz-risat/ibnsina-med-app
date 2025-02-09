@@ -138,7 +138,7 @@ export default function PatientList() {
         </div>
 
         <div
-          className={`fixed inset-y-0 right-0 shadow-lg transition-transform transform overflow-y-auto ${
+          className={`fixed inset-y-0 right-0 transition-transform transform overflow-y-auto ${
             isFilterSidebarOpen ? "translate-x-0" : "translate-x-full"
           } md:static md:translate-x-0 w-64 md:w-64`}
         >
