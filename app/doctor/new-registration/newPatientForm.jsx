@@ -232,7 +232,6 @@ const NewPatientForm = ({ onSubmit }) => {
           </div>
         </form>
       </div>
-      //{" "}
     </div>
   );
 };
