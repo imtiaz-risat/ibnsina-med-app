@@ -1,5 +1,11 @@
-import React from "react";
+"use client";
+
+import PrescriptionForm from "./prescriptionForm";
 
 export default function PrescribePage() {
-  return <div>Prescription Page</div>;
+  return (
+    <div>
+      <PrescriptionForm />
+    </div>
+  );
 }
