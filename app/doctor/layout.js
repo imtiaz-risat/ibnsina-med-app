@@ -11,7 +11,6 @@ const DoctorLayout = ({ children }) => {
 
   useEffect(() => {
     const handleRouteChangeStart = () => setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 2000);
     const handleRouteChangeComplete = () => setIsLoading(false);
 
     window.addEventListener("beforeunload", handleRouteChangeStart);
