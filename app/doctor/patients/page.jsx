@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiUsers } from "react-icons/fi";
 import { LiaFilePrescriptionSolid } from "react-icons/lia";
 import { RiFolderUserLine } from "react-icons/ri";
 import { Filter } from "lucide-react";
 import { SearchBox } from "./searchBox";
 import { Pagination } from "./pagination";
-import { patients } from "./mockPatient";
 import { FilterSidebar } from "./filterSidebar";
 import { filterOptions } from "./mockFilterOptions";
 
@@ -17,6 +16,42 @@ export default function PatientList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilters, setSelectedFilters] = useState({});
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
+
+  const [patients, setPatients] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    async function fetchPatients() {
+      try {
+        setIsLoading(true);
+        const res = await fetch("/api/doctor/getPatient");
+        
+        if (!res.ok) {
+          throw new Error('Failed to fetch patients');
+        }
+        
+        const data = await res.json();
+        setPatients(data);
+        setIsLoading(false);
+        //console.log(data);
+      } catch (err) {
+        setError(err);
+        setIsLoading(false);
+      }
+    }
+
+    fetchPatients();
+  }, []); // Empty dependency array means this runs once on component mount
+
+  if (isLoading) {
+    return <div>Loading patients...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading patients: {error.message}</div>;
+  }
+
 
   const handleFilterChange = (section, values) => {
     setSelectedFilters((prev) => ({
