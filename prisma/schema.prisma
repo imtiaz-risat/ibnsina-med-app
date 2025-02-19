@@ -20,25 +20,154 @@ model Admin {
 }
 
 model Doctor {
-  id        Int    @id @default(autoincrement())
-  firstname String
-  lastname  String
-  username  String @unique
-  password  String
-  gender    String
-  phone     String
-  address   String
+  id           Int            @id @default(autoincrement())
+  firstname    String
+  lastname     String
+  username     String         @unique
+  password     String
+  gender       String
+  phone        String
+  address      String
+  Prescription Prescription[]
 }
 
 model Patient {
-  id          Int      @id @default(autoincrement())
-  name        String
-  dateOfBirth DateTime
-  gender      String
-  maritalStatus String
-  district    String
-  occupation  String
-  refBy       String
-  phone       String
-  note        String?  // Optional field
+  id                     Int                      @id @default(autoincrement())
+  name                   String
+  dateOfBirth            DateTime
+  gender                 String
+  maritalStatus          String
+  district               String
+  occupation             String
+  refBy                  String
+  phone                  String
+  note                   String? // Optional field
+  Prescription           Prescription[]
+  PatientPersonalHistory PatientPersonalHistory[]
+  PatientFamilyHistory   PatientFamilyHistory[]
+  PatientMedicalHistory  PatientMedicalHistory[]
+  PatientSurgicalHistory PatientSurgicalHistory[]
+  PatientDrugHistory     PatientDrugHistory[]
+  PatientExamFinding     PatientExamFinding[]
+  PatientDiagnosis       PatientDiagnosis[]
+  PatientManagementPlan  PatientManagementPlan[]
+  PatientInvestigation   PatientInvestigation[]
+}
+
+model Prescription {
+  id                     Int                      @id @default(autoincrement())
+  patientId              Int
+  patient                Patient                  @relation(fields: [patientId], references: [id])
+  doctorId               Int
+  doctor                 Doctor                   @relation(fields: [doctorId], references: [id])
+  dateCreated            DateTime                 @default(now())
+  nextVisit              DateTime?
+  PrescriptionComplaint  PrescriptionComplaint[]
+  PrescriptionTreatment  PrescriptionTreatment[]
+  PrescriptionAdvice     PrescriptionAdvice[]
+  PrescriptionAttachment PrescriptionAttachment[]
+}
+
+model PrescriptionComplaint {
+  id             Int          @id @default(autoincrement())
+  prescriptionId Int
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id])
+  complaint      String
+  value          String?
+}
+
+model PrescriptionTreatment {
+  id             Int          @id @default(autoincrement())
+  prescriptionId Int
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id])
+  drug           String
+  dose           String
+  rule           String
+  duration       String
+}
+
+model PrescriptionAdvice {
+  id             Int          @id @default(autoincrement())
+  prescriptionId Int
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id])
+  advice         String
+}
+
+model PrescriptionAttachment {
+  id             Int          @id @default(autoincrement())
+  prescriptionId Int
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id])
+  file           String
+}
+
+model PatientPersonalHistory {
+  id        Int     @id @default(autoincrement())
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+  attribute String
+  value     String?
+}
+
+model PatientFamilyHistory {
+  id        Int     @id @default(autoincrement())
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+  attribute String
+  value     String?
+}
+
+model PatientMedicalHistory {
+  id        Int     @id @default(autoincrement())
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+  attribute String
+  value     String?
+}
+
+model PatientSurgicalHistory {
+  id        Int     @id @default(autoincrement())
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+  attribute String
+  value     String?
+}
+
+model PatientDrugHistory {
+  id        Int     @id @default(autoincrement())
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+  attribute String
+  value     String?
+}
+
+model PatientExamFinding {
+  id        Int     @id @default(autoincrement())
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+  attribute String
+  value     String?
+}
+
+model PatientDiagnosis {
+  id        Int     @id @default(autoincrement())
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+  attribute String
+  value     String?
+}
+
+model PatientManagementPlan {
+  id        Int     @id @default(autoincrement())
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+  attribute String
+  value     String?
+}
+
+model PatientInvestigation {
+  id        Int     @id @default(autoincrement())
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+  attribute String
+  value     String?
 }
