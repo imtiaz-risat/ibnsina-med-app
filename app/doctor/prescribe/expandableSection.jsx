@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function SectionHeader({ title, onToggle, isExpanded, itemCount }) {
   return (
@@ -167,11 +167,14 @@ function TopicList({ items, onEdit, onDelete }) {
 
 export function ExpandableSection({
   title,
+  initialItems = [],
   defaultExpanded = false,
   suggestions = [],
+  sectionKey, // New prop to identify section
+  onUpdate, // New prop to send data back
 }) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(initialItems);
 
   const handleAdd = (topic, value) => {
     setItems((prevItems) => [...prevItems, { topic, value }]);
@@ -186,6 +189,11 @@ export function ExpandableSection({
   const handleDelete = (id) => {
     setItems((prevItems) => prevItems.filter((_, i) => i !== id));
   };
+
+  // useEffect to send updates to parent component
+  useEffect(() => {
+    onUpdate && onUpdate(items);
+  }, [items, onUpdate]);
 
   return (
     <div className="border border-gray-200 rounded-md">
