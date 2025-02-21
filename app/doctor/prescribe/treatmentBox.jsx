@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiEdit2, FiTrash2, FiCheck } from "react-icons/fi";
 
 // Treatment suggestions
@@ -339,7 +339,7 @@ function TreatmentItem({ item, onEdit, onDelete }) {
   );
 }
 
-function TreatmentBox() {
+function TreatmentBox({ onUpdate }) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [items, setItems] = useState([]);
 
@@ -356,6 +356,11 @@ function TreatmentBox() {
   const handleDelete = (index) => {
     setItems((prevItems) => prevItems.filter((_, i) => i !== index));
   };
+
+  // useEffect to send updates to parent component
+  useEffect(() => {
+    onUpdate(items);
+  }, [items, onUpdate]);
 
   return (
     <div className="border border-gray-200 rounded-md">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   FiPaperclip,
   FiX,
@@ -199,6 +199,12 @@ export default function AttachmentBox({
       if (onFilesChange) onFilesChange(updatedFiles);
       return updatedFiles;
     });
+  };
+
+  // Update Attachment
+  const handleFileChange = (newFiles) => {
+    setFiles(newFiles);
+    onFilesChange(newFiles);
   };
 
   const handleRemoveFile = (index) => {
