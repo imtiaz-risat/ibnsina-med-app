@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FiEdit2, FiTrash2, FiCheck } from "react-icons/fi";
+import { FiCheck } from "react-icons/fi";
 
 // Treatment suggestions
 const suggestions = {
@@ -55,13 +55,21 @@ const suggestions = {
   ],
 };
 
-function SectionHeader({ onToggle, isExpanded }) {
+function SectionHeader({
+  title = "Treatments",
+  onToggle,
+  isExpanded,
+  itemCount,
+}) {
   return (
     <div
       onClick={onToggle}
       className="flex items-center justify-between bg-black text-white p-2 rounded-t-md cursor-pointer group"
     >
-      <h2 className="text-sm font-medium">Treatment</h2>
+      <h2 className="text-sm font-medium">
+        {title}
+        {itemCount > 0 && ` (${itemCount})`}
+      </h2>
       <div className="flex items-center gap-1">
         <span className="transition-transform duration-200 group-hover:scale-110">
           {isExpanded ? "−" : "+"}
@@ -324,24 +332,24 @@ function TreatmentItem({ item, onEdit, onDelete }) {
       <div className="flex items-center gap-1">
         <button
           onClick={() => setIsEditing(true)}
-          className="p-1 text-gray-400 hover:text-black rounded-full"
+          className="px-2 py-1 text-xs border border-gray-200 rounded-md hover:bg-gray-100 mr-1"
         >
-          <FiEdit2 className="w-3.5 h-3.5" />
+          Edit
         </button>
         <button
           onClick={onDelete}
-          className="p-1 text-gray-400 hover:text-red-500 rounded-full"
+          className="px-2 py-1 text-xs text-red-600 border border-gray-200 rounded-md hover:bg-red-50"
         >
-          <FiTrash2 className="w-3.5 h-3.5" />
+          Delete
         </button>
       </div>
     </div>
   );
 }
 
-function TreatmentBox({ onUpdate }) {
+function TreatmentBox({ initialItems = [], onUpdate }) {
   const [isExpanded, setIsExpanded] = useState(true);
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(initialItems);
 
   const handleAdd = (newItem) => {
     setItems((prevItems) => [...prevItems, newItem]);
@@ -367,6 +375,7 @@ function TreatmentBox({ onUpdate }) {
       <SectionHeader
         onToggle={() => setIsExpanded(!isExpanded)}
         isExpanded={isExpanded}
+        itemCount={items.length}
       />
       {isExpanded && (
         <div className="p-2 border-t border-gray-200">

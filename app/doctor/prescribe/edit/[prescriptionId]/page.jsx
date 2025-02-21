@@ -1,40 +1,54 @@
-import PrescriptionForm from "../../prescriptionForm";
-import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import LoadingSkeleton from "@/components/LoadingSkeleton";
+import EditPrescription from "./editPresctiption";
 
 async function getPrescriptionData(prescriptionId) {
   try {
-    const res = await fetch(`/api/prescription/${prescriptionId}`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/prescription/${prescriptionId}`
+    );
     if (!res.ok) throw new Error("Failed to fetch prescription");
-    return await res.json();
+    const data = await res.json();
+    console.log("PRESCRIPTION DATA:\n ================================");
+    console.log(data);
+    console.log("-------------------------------");
+    return data;
   } catch (error) {
     console.error("Prescription fetch error:", error);
     return null;
   }
 }
 
-export default async function EditPrescription({ params }) {
-  const prescriptionData = await getPrescriptionData(params.prescriptionId);
+async function getPatientData(patientId) {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/patients/${patientId}`
+    );
+    if (!res.ok) throw new Error("Failed to fetch patient");
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error("Patient fetch error:", error);
+    return null;
+  }
+}
 
-  if (!prescriptionData) {
-    notFound();
+export default async function CreatePrescription({ params }) {
+  const prescriptionData = await getPrescriptionData(params.prescriptionId);
+  const patientData = await getPatientData(prescriptionData.patientId);
+
+  if (!patientData) {
+    return <>Patient does not exist</>;
   }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <Suspense fallback={<LoadingSkeleton />}>
-        <PrescriptionForm
+      <Suspense fallback={<>Loading Data...</>}>
+        <EditPrescription
+          patientId={prescriptionData.patientId}
+          patientData={patientData}
           prescriptionId={params.prescriptionId}
-          initialData={{
-            patient: prescriptionData.patient,
-            complaints: prescriptionData.PrescriptionComplaint,
-            treatments: prescriptionData.PrescriptionTreatment,
-            advice: prescriptionData.PrescriptionAdvice.map((a) => a.advice),
-            attachments: prescriptionData.PrescriptionAttachment,
-            nextVisit: prescriptionData.nextVisit,
-          }}
-          isEditMode={true}
+          prescriptionData={prescriptionData}
         />
       </Suspense>
     </div>

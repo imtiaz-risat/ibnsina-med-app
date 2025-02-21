@@ -128,7 +128,7 @@ export default function NewPrescription({ patientId, patientData }) {
           <div className="flex flex-col-reverse sm:flex-row items-start justify-between mb-2">
             <div className="flex flex-row items-center">
               Patient ID{" "}
-              <input
+              {/* <input
                 type="text"
                 placeholder="Patient ID"
                 className="mt-1 ml-2 text-sm border-b border-gray-200 focus:border-black outline-none"
@@ -136,14 +136,17 @@ export default function NewPrescription({ patientId, patientData }) {
                 onChange={(e) =>
                   setPatientData({ ...patientData, id: e.target.value })
                 }
-              />
+              /> */}
+              <span className="border-b border-gray-200 px-2">
+                {patientData.id}
+              </span>
             </div>
             <p className="text-sm text-gray-600">Date: 03-Feb-2025</p>
           </div>
           <div className="flex flex-row items-baseline mb-2">
             <div className="font-semibold mr-4 ">
               Patient Name:{" "}
-              <span className="border-b border-gray-200">
+              <span className="border-b border-gray-200 px-2">
                 {patientData.name}
               </span>
             </div>
@@ -151,13 +154,13 @@ export default function NewPrescription({ patientId, patientData }) {
               <div className="flex flex-row items-center justify-between space-x-4">
                 <div className="text-sm text-gray-600 mr-4">
                   Age:{" "}
-                  <span className="border-b border-gray-200">
+                  <span className="border-b border-gray-200 px-2">
                     {patientData.age}
                   </span>
                 </div>
                 <div className="text-sm text-gray-600 mr-4">
                   Gender:{" "}
-                  <span className="border-b border-gray-200">
+                  <span className="border-b border-gray-200 px-2">
                     {patientData.gender}
                   </span>
                 </div>
