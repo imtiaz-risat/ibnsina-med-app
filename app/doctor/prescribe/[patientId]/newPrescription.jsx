@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
-import { ExpandableSection } from "./expandableSection";
-import AttachmentBox from "./attachmentBox";
-import TreatmentBox from "./treatmentBox";
+import { useCallback, useState } from "react";
+import { ExpandableSection } from "../expandableSection";
+import AttachmentBox from "../attachmentBox";
+import TreatmentBox from "../treatmentBox";
 
 // Sample suggestions for each section
 const complaintSuggestions = [
@@ -38,38 +38,39 @@ const adviceSuggestions = [
   "Avoid stress",
 ];
 
-export default function PrescriptionForm({
-  initialData,
-  isEditMode = false,
-  prescriptionId,
-}) {
-  const [patientData, setPatientData] = useState(initialData.patient || {});
-
+export default function NewPrescription({ patientId, patientData }) {
+  //   console.log("patientData in newPrescription:" + patientData);
   const [formData, setFormData] = useState({
-    complaints: initialData.complaints || [],
-    treatments: initialData.treatments || [],
-    advice: initialData.advice || [],
-    attachments: initialData.attachments || [],
-    hasNextVisit: initialData.hasNextVisit || false,
-    nextVisitDate: initialData.nextVisitDate || "",
-    personalHistory: initialData.personalHistory || [],
-    familyHistory: initialData.familyHistory || [],
-    medicalHistory: initialData.medicalHistory || [],
-    surgicalHistory: initialData.surgicalHistory || [],
-    drugHistory: initialData.drugHistory || [],
-    examFindings: initialData.examFindings || [],
-    diagnosis: initialData.diagnosis || [],
-    managementPlan: initialData.managementPlan || [],
-    investigations: initialData.investigations || [],
+    // prescription data
+    complaints: [],
+    treatments: [],
+    advice: [],
+    attachments: [],
+    hasNextVisit: false,
+    nextVisitDate: "",
+    // patient data
+    personalHistory: patientData.PatientPersonalHistory || [],
+    familyHistory: patientData.PatientFamilyHistory || [],
+    medicalHistory: patientData.PatientMedicalHistory || [],
+    surgicalHistory: patientData.PatientSurgicalHistory || [],
+    drugHistory: patientData.PatientDrugHistory || [],
+    examinationFinding: patientData.PatientExamFinding || [],
+    diagnosis: patientData.PatientDiagnosis || [],
+    managementPlan: patientData.PatientManagementPlan || [],
+    investigation: patientData.PatientInvestigation || [],
   });
 
+  console.log("formData:" + JSON.stringify(formData));
+
   // Unified update function
-  const updateFormData = (section, data) => {
-    setFormData((prev) => ({
-      ...prev,
-      [section]: data,
-    }));
-  };
+  // Memoize the update function
+  const updateFormData = useCallback((section, data) => {
+    setFormData((prev) => {
+      // Only update if data changed
+      if (JSON.stringify(prev[section]) === JSON.stringify(data)) return prev;
+      return { ...prev, [section]: data };
+    });
+  }, []); // Empty dependency array since setFormData is stable
 
   const handleViewProfile = () => {
     // Add your logic here to handle the view profile button click
@@ -80,15 +81,9 @@ export default function PrescriptionForm({
 
     console.log("Attempting to save...");
     try {
-      const url = isEditMode
-        ? `${process.env.NEXT_PUBLIC_API_URL}/api/prescription/${prescriptionId}`
-        : `${process.env.NEXT_PUBLIC_API_URL}/api/prescription`;
-
-      const method = isEditMode ? "PUT" : "POST";
-
       // Collecting All data for Prescription
       const prescriptionData = {
-        patientId: initialData.patient.id,
+        patientId: patientData.id,
         doctorId: 1, // Replace with actual auth ID
         complaints: formData.complaints,
         treatments: formData.treatments,
@@ -101,17 +96,20 @@ export default function PrescriptionForm({
         medicalHistory: formData.medicalHistory,
         surgicalHistory: formData.surgicalHistory,
         drugHistory: formData.drugHistory,
-        examinationFindings: formData.examinationFindings,
+        examinationFinding: formData.examinationFinding,
         diagnosis: formData.diagnosis,
         managementPlan: formData.managementPlan,
         investigation: formData.investigation,
       };
 
-      const response = fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(prescriptionData),
-      });
+      const response = fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/prescription`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(prescriptionData),
+        }
+      );
 
       if (!response.ok) throw new Error("Submission failed: " + response);
 
@@ -184,54 +182,90 @@ export default function PrescriptionForm({
             />
             <ExpandableSection
               title="Personal History"
+              initialItems={formData.personalHistory.map((item) => ({
+                topic: item.attribute, // Map 'attribute' to 'topic'
+                value: item.value,
+              }))}
               defaultExpanded={false}
               suggestions={complaintSuggestions}
               onUpdate={(data) => updateFormData("personalHistory", data)}
             />
             <ExpandableSection
               title="Family History"
+              initialItems={formData.familyHistory.map((item) => ({
+                topic: item.attribute,
+                value: item.value,
+              }))}
               defaultExpanded={false}
               suggestions={complaintSuggestions}
               onUpdate={(data) => updateFormData("familyHistory", data)}
             />
             <ExpandableSection
               title="Medical History"
+              initialItems={formData.medicalHistory.map((item) => ({
+                topic: item.attribute,
+                value: item.value,
+              }))}
               defaultExpanded={false}
               suggestions={complaintSuggestions}
               onUpdate={(data) => updateFormData("medicalHistory", data)}
             />
             <ExpandableSection
               title="Surgical History"
+              initialItems={formData.surgicalHistory.map((item) => ({
+                topic: item.attribute,
+                value: item.value,
+              }))}
               defaultExpanded={false}
               suggestions={complaintSuggestions}
               onUpdate={(data) => updateFormData("surgicalHistory", data)}
             />
             <ExpandableSection
               title="Drug History"
+              initialItems={formData.drugHistory.map((item) => ({
+                topic: item.attribute,
+                value: item.value,
+              }))}
               defaultExpanded={false}
               suggestions={complaintSuggestions}
               onUpdate={(data) => updateFormData("drugHistory", data)}
             />
             <ExpandableSection
-              title="Examination Findings"
+              title="Examination Finding"
+              initialItems={formData.examinationFinding.map((item) => ({
+                topic: item.attribute,
+                value: item.value,
+              }))}
               defaultExpanded={false}
               suggestions={complaintSuggestions}
-              onUpdate={(data) => updateFormData("examinationFindings", data)}
+              onUpdate={(data) => updateFormData("examinationFinding", data)}
             />
             <ExpandableSection
               title="Diagnosis"
+              initialItems={formData.diagnosis.map((item) => ({
+                topic: item.attribute,
+                value: item.value,
+              }))}
               defaultExpanded={false}
               suggestions={complaintSuggestions}
               onUpdate={(data) => updateFormData("diagnosis", data)}
             />
             <ExpandableSection
               title="Management Plan"
+              initialItems={formData.managementPlan.map((item) => ({
+                topic: item.attribute,
+                value: item.value,
+              }))}
               defaultExpanded={false}
               suggestions={complaintSuggestions}
               onUpdate={(data) => updateFormData("managementPlan", data)}
             />
             <ExpandableSection
               title="Investigation"
+              initialItems={formData.investigation.map((item) => ({
+                topic: item.attribute,
+                value: item.value,
+              }))}
               defaultExpanded={false}
               suggestions={complaintSuggestions}
               onUpdate={(data) => updateFormData("investigation", data)}
