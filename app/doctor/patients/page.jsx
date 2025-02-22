@@ -110,7 +110,7 @@ export default function PatientList() {
         <div className="flex-1 overflow-x-auto ">
           <table className="min-w-full bg-white border border-gray-300 rounded-md">
             <thead>
-              <tr className="bg-gray-100">
+              <tr className="bg-gray-100  text-nowrap">
                 <th className="py-2 px-4 border-b text-left font-medium text-sm">
                   ID
                 </th>
@@ -138,22 +138,29 @@ export default function PatientList() {
               {paginatedPatients.map((patient) => (
                 <tr key={patient.id} className="hover:bg-gray-50 text-sm">
                   <td className="py-2 px-4 border-b">{patient.id}</td>
-                  <td className="py-2 px-4 border-b">{patient.name}</td>
+                  <td className="py-2 px-4 border-b text-nowrap">
+                    {patient.name}
+                  </td>
                   <td className="py-2 px-4 border-b">{patient.gender}</td>
                   <td className="py-2 px-4 border-b">
                     {new Date(patient.dateOfBirth).toLocaleDateString()}
                   </td>
                   <td className="py-2 px-4 border-b">{patient.phone}</td>
-                  <td className="py-2 px-4 border-b">{patient.note || "-"}</td>
+                  <td className="py-2 px-4 border-b text-ellipsis">
+                    {patient.note || "-"}
+                  </td>
                   <td className="py-2 px-4 border-b">
                     <div className="flex items-center gap-2">
-                      <button className="flex items-center gap-1 px-2 py-1 text-xs text-blue-600 border border-gray-200 rounded-md hover:bg-blue-50">
+                      <Link
+                        href={`/doctor/prescribe/${patient.id}`}
+                        className="flex items-center gap-1 text-nowrap px-2 py-1 text-xs text-blue-600 border border-gray-200 rounded-md hover:bg-blue-50"
+                      >
                         New Prescription
                         <LiaFilePrescriptionSolid />
-                      </button>
+                      </Link>
                       <Link
-                        href={`/doctor/patients/profile/${patient.id}`}
-                        className="flex items-center gap-1 px-2 py-1 text-xs text-green-600 border border-gray-200 rounded-md hover:bg-green-50"
+                        href={`/doctor/patients/${patient.id}`}
+                        className="flex items-center gap-1 text-nowrap px-2 py-1 text-xs text-green-600 border border-gray-200 rounded-md hover:bg-green-50"
                       >
                         View Profile
                         <FiEye />
