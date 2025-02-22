@@ -1,41 +1,29 @@
-import PrescriptionForm from "./prescriptionForm";
-import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import PrescriptionsTable from "./PrescriptionsTable";
 
-async function getPatientData(patientId) {
+async function getPrescriptions() {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/patients/${patientId}`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/prescription`,
+      {
+        cache: "no-store",
+      }
     );
-    if (!res.ok) throw new Error("Failed to fetch patient");
+    if (!res.ok) throw new Error("Failed to fetch prescriptions");
     return await res.json();
   } catch (error) {
-    console.error("Patient fetch error:", error);
-    return null;
+    console.error("Fetch error:", error);
+    return [];
   }
 }
 
-export default async function CreatePrescription({ params }) {
-  const patientData = await getPatientData(params.patientId);
-
-  if (!patientData) {
-    notFound();
-  }
-
+export default async function ListOfPrescriptions() {
+  const prescriptions = await getPrescriptions();
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <Suspense fallback={<>Loading...</>}>
-        <PrescriptionForm
-          patientId={params.patientId}
-          initialData={{
-            patient: patientData,
-            complaints: [],
-            treatments: [],
-            advice: [],
-            attachments: [],
-          }}
-          isEditMode={false}
-        />
+      <h1 className="text-2xl font-bold mb-6">All Prescriptions</h1>
+      <Suspense fallback={<div>Loading prescriptions...</div>}>
+        <PrescriptionsTable prescriptions={prescriptions} />
       </Suspense>
     </div>
   );

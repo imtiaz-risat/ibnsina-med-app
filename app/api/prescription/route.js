@@ -3,33 +3,31 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// GET Single Prescription Data from prescriptionId
-export async function GET(request, { params }) {
+// GET All Prescription Data
+export async function GET() {
   try {
-    const prescription = await prisma.prescription.findUnique({
-      where: { id: parseInt(params.id) },
+    const prescriptions = await prisma.prescription.findMany({
       include: {
-        patient: true,
-        doctor: true,
-        PrescriptionComplaint: true,
-        PrescriptionTreatment: true,
-        PrescriptionAdvice: true,
-        PrescriptionAttachment: true,
+        patient: {
+          select: {
+            name: true,
+          },
+        },
+        doctor: {
+          select: {
+            firstname: true,
+            lastname: true,
+          },
+        },
       },
+      orderBy: { dateCreated: "desc" },
     });
 
-    if (!prescription) {
-      return NextResponse.json(
-        { error: "Prescription not found" },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(prescription);
+    return NextResponse.json(prescriptions);
   } catch (error) {
-    console.error("Prescription fetch error:", error);
+    console.error("Error fetching prescriptions:", error);
     return NextResponse.json(
-      { error: "Failed to fetch prescription", details: error.message },
+      { error: error.message || "Failed to fetch prescriptions" },
       { status: 500 }
     );
   }
