@@ -1,9 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useEffect } from "react";
-import { FiUsers } from "react-icons/fi";
+import { FiEye } from "react-icons/fi";
 import { LiaFilePrescriptionSolid } from "react-icons/lia";
-import { RiFolderUserLine } from "react-icons/ri";
 import { Filter } from "lucide-react";
 import { SearchBox } from "./searchBox";
 import { Pagination } from "./pagination";
@@ -20,17 +20,17 @@ export default function PatientList() {
   const [patients, setPatients] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   useEffect(() => {
     async function fetchPatients() {
       try {
         setIsLoading(true);
         const res = await fetch("/api/doctor/getPatient");
-        
+
         if (!res.ok) {
-          throw new Error('Failed to fetch patients');
+          throw new Error("Failed to fetch patients");
         }
-        
+
         const data = await res.json();
         setPatients(data);
         setIsLoading(false);
@@ -51,7 +51,6 @@ export default function PatientList() {
   if (error) {
     return <div>Error loading patients: {error.message}</div>;
   }
-
 
   const handleFilterChange = (section, values) => {
     setSelectedFilters((prev) => ({
@@ -87,7 +86,7 @@ export default function PatientList() {
     <div className="container w-full mx-auto">
       <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center gap-4 sm:gap-20 mb-4">
         <div className="flex items-center gap-2">
-          <FiUsers className="w-5 h-5 text-black hidden md:block" />
+          {/* <FiUsers className="w-5 h-5 text-black hidden md:block" /> */}
           <h1 className="text-2xl font-bold text-black text-nowrap">
             Registered Patients
           </h1>
@@ -148,12 +147,17 @@ export default function PatientList() {
                   <td className="py-2 px-4 border-b">{patient.note || "-"}</td>
                   <td className="py-2 px-4 border-b">
                     <div className="flex items-center gap-2">
-                      <button className="p-1 hover:bg-gray-100 rounded text-blue-500">
-                        <LiaFilePrescriptionSolid className="h-6 w-6" />
+                      <button className="flex items-center gap-1 px-2 py-1 text-xs text-blue-600 border border-gray-200 rounded-md hover:bg-blue-50">
+                        New Prescription
+                        <LiaFilePrescriptionSolid />
                       </button>
-                      <button className="p-1 hover:bg-gray-100 rounded">
-                        <RiFolderUserLine className="h-6 w-6" />
-                      </button>
+                      <Link
+                        href={`/doctor/patients/profile/${patient.id}`}
+                        className="flex items-center gap-1 px-2 py-1 text-xs text-green-600 border border-gray-200 rounded-md hover:bg-green-50"
+                      >
+                        View Profile
+                        <FiEye />
+                      </Link>
                     </div>
                   </td>
                 </tr>
