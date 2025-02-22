@@ -191,3 +191,36 @@ export async function PUT(request, { params }) {
     );
   }
 }
+
+// DELETE PRESCRIPTION
+export async function DELETE(request, { params }) {
+  try {
+    const prescriptionId = parseInt(params.id);
+    if (isNaN(prescriptionId)) {
+      return NextResponse.json(
+        { error: "Invalid prescription ID" },
+        { status: 400 }
+      );
+    }
+
+    // Delete the prescription and related records via transaction
+    await prisma.$transaction([
+      prisma.prescriptionComplaint.deleteMany({ where: { prescriptionId } }),
+      prisma.prescriptionTreatment.deleteMany({ where: { prescriptionId } }),
+      prisma.prescriptionAdvice.deleteMany({ where: { prescriptionId } }),
+      prisma.prescriptionAttachment.deleteMany({ where: { prescriptionId } }),
+      prisma.prescription.delete({ where: { id: prescriptionId } }),
+    ]);
+
+    return NextResponse.json(
+      { success: true, message: "Prescription deleted" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Delete error:", error);
+    return NextResponse.json(
+      { error: "Failed to delete prescription: " + error.message },
+      { status: 500 }
+    );
+  }
+}
