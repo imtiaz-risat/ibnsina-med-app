@@ -3,6 +3,8 @@ import { useCallback, useState } from "react";
 import { ExpandableSection } from "../expandableSection";
 import AttachmentBox from "../attachmentBox";
 import TreatmentBox from "../treatmentBox";
+import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 // Sample suggestions for each section
 const complaintSuggestions = [
@@ -39,7 +41,8 @@ const adviceSuggestions = [
 ];
 
 export default function NewPrescription({ patientId, patientData }) {
-  //   console.log("patientData in newPrescription:" + patientData);
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     // prescription data
     complaints: [],
@@ -70,14 +73,15 @@ export default function NewPrescription({ patientId, patientData }) {
       if (JSON.stringify(prev[section]) === JSON.stringify(data)) return prev;
       return { ...prev, [section]: data };
     });
-  }, []); // Empty dependency array since setFormData is stable
+  }, []);
 
   const handleViewProfile = () => {
     // Add your logic here to handle the view profile button click
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     console.log("Attempting to save...");
     try {
@@ -102,7 +106,7 @@ export default function NewPrescription({ patientId, patientData }) {
         investigation: formData.investigation,
       };
 
-      const response = fetch(
+      const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/prescription`,
         {
           method: "POST",
@@ -111,13 +115,21 @@ export default function NewPrescription({ patientId, patientData }) {
         }
       );
 
-      if (!response.ok) throw new Error("Submission failed: " + response);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(
+          `HTTP error! status: ${response.status}, details: ${errorText}`
+        );
+      }
 
-      const result = response.json();
-      router.push(`/doctor/prescriptions/${result.id}`);
+      const result = await response.json();
+      toast.success("Prescription saved successfully!");
+      router.push(`/doctor/prescribe/edit/${result.id}`);
     } catch (error) {
+      toast.error("Submission failed: " + error);
       console.error("Submission error:", error);
-      // Add error state handling here
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -332,8 +344,9 @@ export default function NewPrescription({ patientId, patientData }) {
                 type="submit"
                 className="w-full px-4 py-2 text-white transition-colors duration-200 bg-gray-800 rounded-md hover:bg-black"
                 onClick={handleSubmit}
+                disabled={isSubmitting}
               >
-                Save Prescription
+                {isSubmitting ? "Saving..." : "Save Prescription"}
               </button>
             </div>
           </div>
