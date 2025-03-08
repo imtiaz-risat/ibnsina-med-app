@@ -3,8 +3,7 @@
 ## Prerequisites
 
 - Ensure you have the following installed:
-  - Node.js (version X.X.X or later)
-  - PostgreSQL (version X.X.X or later)
+  - Node.js (version 20.18.0 or later)
   - Prisma CLI (install globally using `npm install -g prisma`)
   - Git (for cloning the repository)
 
