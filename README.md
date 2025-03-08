@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Installation Guide
 
-## Getting Started
+## Prerequisites
 
-First, run the development server:
+- Ensure you have the following installed:
+  - Node.js (version X.X.X or later)
+  - PostgreSQL (version X.X.X or later)
+  - Prisma CLI (install globally using `npm install -g prisma`)
+  - Git (for cloning the repository)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Cloning the Repository
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Open your terminal and run the following command to clone the repository:
+  ```bash
+  git clone https://github.com/imtiaz-risat/ibnsina-med-app.git
+  cd ibnsina-med-app
+  ```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Installing Dependencies
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- After navigating to the project directory, install the necessary dependencies:
+  ```bash
+  npm install
+  ```
 
-## Learn More
+## Prisma and PostgreSQL Setup
 
-To learn more about Next.js, take a look at the following resources:
+- Create a PostgreSQL database:
+  ```sql
+  CREATE DATABASE your_database_name;
+  ```
+- Configure the database connection in the `prisma/schema.prisma` file:
+  ```prisma
+  datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+  }
+  ```
+- Run the following command to generate Prisma Client:
+  ```bash
+  npx prisma generate
+  ```
+- Apply migrations to set up the database schema:
+  ```bash
+  npx prisma migrate dev --name init
+  ```
+- **Data Validation for Authentication**:
+  - Ensure there are entries in the Doctor and Admin tables for login:
+    ```sql
+    INSERT INTO public."Doctor"(
+    id, firstname, lastname, username, password, gender, phone, address)
+    VALUES ('1', 'your_firstname', 'your_lastname', 'your_username', 'secure_password', 'Male', '01987654321', 'your_address');
+    INSERT INTO public."Admin" (id, username, password) VALUES ('1', 'admin', 'admin123');
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Routes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Here is a list of all the pages in the app with their routing URLs:
+  - `/login` - Doctor login
+  - `/login/admin` - Admin login
+  - `/doctor` - Doctor dashboard
+  - `/doctor/new-registration` - New patient registration
+  - `/doctor/patients` - List of all patients
+  - `/doctor/patients/:id` - Patient Profile
+  - `/doctor/prescribe` - List of all prescriptions
+  - `/doctor/prescribe/:patientId` - New prescription for a patient
+  - `/doctor/prescribe/edit/:prescriptionId` - Edit a prescription
+  - `/doctor/profile` - Doctor profile
+  - `/doctor/settings` - Doctor settings
+  - `/admin` - Admin panel
+  - `/admin/add-doctor` - Add new doctor
+  - `/admin/doctor-list` - List of all doctors
