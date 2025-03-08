@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import NewPatientForm from "./newPatientForm";
+import toast, { Toaster } from "react-hot-toast";
 
 const NewRegistrationPage = () => {
   const addPatient = async (patientData) => {
@@ -15,24 +16,21 @@ const NewRegistrationPage = () => {
 
       if (response.ok) {
         const newPatient = await response.json();
-        alert("Patient added successfully!");
+        toast.success("Patient added successfully!");
+        return newPatient;
       } else {
-        const errorData = await response.json();
-        console.error(
-          "[Response not ok] Error adding patient:",
-          errorData.error
-        );
-        alert("[Response not ok] Failed to add patient");
+        toast.error("Failed to add patient");
       }
     } catch (error) {
       console.error("[Form Catch] Error adding patient:", error);
-      alert("[Form Catch] Failed to add patient");
+      toast.error("[Form Catch] Failed to add patient");
     }
   };
 
   return (
     <div className="w-full">
       <NewPatientForm onSubmit={addPatient} />
+      <Toaster />
     </div>
   );
 };

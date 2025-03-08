@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { SlUser, SlUserFemale } from "react-icons/sl";
 import { FiEdit, FiPrinter, FiTrash2 } from "react-icons/fi";
+import { toast, Toaster } from "react-hot-toast";
 
 export default function PatientProfile({ initialData, prescriptions }) {
   const [patient, setPatient] = useState(initialData);
@@ -25,19 +26,20 @@ export default function PatientProfile({ initialData, prescriptions }) {
         const res = await fetch(`/api/patients/${patient.id}/prescriptions`);
         const newData = await res.json();
         setAllPrescriptions(newData);
-        alert("Deleted successfully");
+        toast.success("Deleted successfully");
       } catch (error) {
         // Rollback on error
         const res = await fetch(`/api/patients/${patient.id}/prescriptions`);
         const newData = await res.json();
         setAllPrescriptions(newData);
-        alert("Delete failed: " + error.message);
+        toast.error("Delete Failed");
       }
     }
   };
 
   return (
     <div>
+      <Toaster />
       <div className="px-6  max-w-7xl mx-auto">
         {/* Header Section with Profile and Actions */}
         <div className="flex items-center justify-between bg-white rounded-lg shadow p-4 mb-4">
