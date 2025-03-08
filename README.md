@@ -37,12 +37,7 @@
   openssl rand -base64 32
   ```
 
-- You can also create an example environment file named `.env.example` with the following content:
-  ```plaintext
-  DATABASE_URL="postgresql://username:password@localhost:5432/your_database_name"
-  JWT_SECRET="your_jwt_secret"
-  // Replace username, password, and your_database_name with your actual PostgreSQL credentials and database name.
-  ```
+- Or you can generate a 32 digit random string from here: https://jwtsecret.com/generate
 
 ## Prisma and PostgreSQL Setup
 
