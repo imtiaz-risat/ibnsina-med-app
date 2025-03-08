@@ -1,8 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const NewPatientForm = ({ onSubmit }) => {
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     dateOfBirth: "",
@@ -20,9 +24,24 @@ const NewPatientForm = ({ onSubmit }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    setIsSubmitting(true);
+
+    try {
+      const formData = new FormData(e.target);
+      const patientData = Object.fromEntries(formData.entries());
+      const response = await onSubmit(patientData);
+
+      if (response && response.id) {
+        e.target.reset();
+        router.push(`/doctor/patients/${response.id}`);
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -48,6 +67,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                disabled={isSubmitting}
                 className="peer w-full border px-2 border-gray-300 placeholder-transparent   transition-colors bg-transparent py-2.5"
                 placeholder="Patient Name"
               />
@@ -67,6 +87,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 value={formData.dateOfBirth}
                 onChange={handleChange}
                 required
+                disabled={isSubmitting}
                 className="peer w-full border px-2 border-gray-300 placeholder-transparent   transition-colors bg-transparent py-2.5"
               />
               <label
@@ -86,6 +107,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 id="gender"
                 value={formData.gender}
                 onChange={handleChange}
+                disabled={isSubmitting}
                 className="w-full border border-gray-300 px-2   transition-colors bg-transparent py-2.5 appearance-none cursor-pointer"
               >
                 <option value="Male">Male</option>
@@ -106,6 +128,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 id="maritalStatus"
                 value={formData.maritalStatus}
                 onChange={handleChange}
+                disabled={isSubmitting}
                 className="w-full border border-gray-300 px-2   transition-colors bg-transparent py-2.5 appearance-none cursor-pointer"
               >
                 <option value="Single">Single</option>
@@ -132,6 +155,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 value={formData.district}
                 onChange={handleChange}
                 required
+                disabled={isSubmitting}
                 className=" peer w-full border px-2 border-gray-300 placeholder-transparent transition-colors bg-transparent py-2.5"
                 placeholder="District"
               />
@@ -151,6 +175,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 value={formData.occupation}
                 onChange={handleChange}
                 required
+                disabled={isSubmitting}
                 className="peer w-full border px-2 border-gray-300 placeholder-transparent transition-colors bg-transparent py-2.5"
                 placeholder="Occupation"
               />
@@ -172,6 +197,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 id="refBy"
                 value={formData.refBy}
                 onChange={handleChange}
+                disabled={isSubmitting}
                 className="peer w-full border px-2 border-gray-300 placeholder-transparent   transition-colors bg-transparent py-2.5"
                 placeholder="Referred By"
               />
@@ -191,6 +217,7 @@ const NewPatientForm = ({ onSubmit }) => {
                 value={formData.phone}
                 onChange={handleChange}
                 required
+                disabled={isSubmitting}
                 className="peer w-full border px-2 border-gray-300 placeholder-transparent   transition-colors bg-transparent py-2.5"
                 placeholder="Phone Number"
               />
@@ -211,6 +238,7 @@ const NewPatientForm = ({ onSubmit }) => {
               value={formData.note}
               onChange={handleChange}
               rows="4"
+              disabled={isSubmitting}
               className="peer w-full border border-gray-300 placeholder-transparent   transition-colors bg-transparent p-4 resize-none"
               placeholder="Additional Notes"
             ></textarea>
@@ -222,12 +250,17 @@ const NewPatientForm = ({ onSubmit }) => {
             </label>
           </div>
 
-          <div className="flex justify-end pt-6">
+          <div className="flex justify-center pt-6">
             <button
               type="submit"
-              className="w-full sm:w-auto px-8 py-3 bg-blue-600 text-white font-medium rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition-all duration-200 hover:scale-105"
+              disabled={isSubmitting}
+              className={`w-full sm:w-auto px-8 py-3 bg-gray-900 text-white font-medium rounded-lg shadow-lg ${
+                isSubmitting
+                  ? "opacity-75 cursor-not-allowed"
+                  : "hover:bg-black"
+              }`}
             >
-              Register Patient
+              {isSubmitting ? "Registering..." : "Register Patient"}
             </button>
           </div>
         </form>
