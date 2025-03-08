@@ -22,8 +22,31 @@
   npm install
   ```
 
+## Environment Variables
+
+- Create a file named `.env` in the root of your project directory.
+- Add the following environment variables to the `.env` file:
+  ```plaintext
+  DATABASE_URL="postgresql://username:password@localhost:5432/your_database_name"
+  NEXTAUTH_SECRET="your_jwt_secret"
+  ```
+- Replace `username`, `password`, and `your_database_name` with your actual PostgreSQL credentials and database name.
+- You can generate a random JWT secret using the following command:
+
+  ```bash
+  openssl rand -base64 32
+  ```
+
+- You can also create an example environment file named `.env.example` with the following content:
+  ```plaintext
+  DATABASE_URL="postgresql://username:password@localhost:5432/your_database_name"
+  JWT_SECRET="your_jwt_secret"
+  // Replace username, password, and your_database_name with your actual PostgreSQL credentials and database name.
+  ```
+
 ## Prisma and PostgreSQL Setup
 
+- Download pgAdmin 4 for Database Setup https://www.pgadmin.org/download/
 - Create a PostgreSQL database:
   ```sql
   CREATE DATABASE your_database_name;
