@@ -3,6 +3,9 @@ import { useCallback, useState } from "react";
 import { ExpandableSection } from "../../expandableSection";
 import AttachmentBox from "../../attachmentBox";
 import TreatmentBox from "../../treatmentBox";
+import toast, { Toaster } from "react-hot-toast";
+import { pdf } from "@react-pdf/renderer";
+import PrescriptionPDF from "../../../../components/prescriptionPDF";
 
 // Sample suggestions for each section
 const complaintSuggestions = [
@@ -45,6 +48,7 @@ export default function EditPrescription({
   prescriptionData,
 }) {
   //   console.log("patientData in newPrescription:" + patientData);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     // prescription data
     complaints: prescriptionData.PrescriptionComplaint || [],
@@ -81,8 +85,9 @@ export default function EditPrescription({
     // Add your logic here to handle the view profile button click
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     console.log("Attempting to update...");
     try {
@@ -107,14 +112,7 @@ export default function EditPrescription({
         investigation: formData.investigation,
       };
 
-      console.log(
-        "prescriptionData before calling API:" +
-          JSON.stringify(prescriptionData)
-      );
-      console.log(
-        "-----------------------------------\n====================================="
-      );
-      const response = fetch(
+      const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/prescription/${prescriptionId}`,
         {
           method: "PUT",
@@ -125,16 +123,62 @@ export default function EditPrescription({
 
       if (!response.ok) throw new Error("Submission failed: " + response);
 
-      const result = response.json();
-      router.push(`/doctor/prescriptions/${result.id}`);
+      // const result = await response.json();
+      toast.success("Prescription updated successfully!");
     } catch (error) {
       console.error("Submission error:", error);
       // Add error state handling here
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handlePrint = async (e) => {
+    e.preventDefault();
+
+    try {
+      const pdfBlob = await pdf(
+        <PrescriptionPDF
+          prescription={{
+            // ...formData,
+            patientName: patientData.name,
+            patientId: patientData.id,
+            age: patientData.age,
+            gender: patientData.gender,
+            maritalStatus: patientData.maritalStatus,
+            prescriptionDateCreated: prescriptionData.dateCreated,
+            doctorName: "Dr. Example Name", // Replace with actual doctor name
+            complaints: formData.complaints,
+            treatments: formData.treatments,
+            advice: formData.advice,
+            personalHistory: formData.personalHistory,
+            familyHistory: formData.familyHistory,
+            medicalHistory: formData.medicalHistory,
+            drugHistory: formData.drugHistory,
+            surgicalHistory: formData.surgicalHistory,
+            examinationFinding: formData.examinationFinding,
+            diagnosis: formData.diagnosis,
+            managementPlan: formData.managementPlan,
+            investigation: formData.investigation,
+            hasNextVisit: formData.hasNextVisit,
+            nextVisitDate: formData.nextVisitDate,
+          }}
+        />
+      ).toBlob();
+
+      const url = URL.createObjectURL(pdfBlob);
+      const win = window.open(url);
+      // win.onload = () => win.print();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("PDF generation failed:", error);
+      toast.error("Failed to generate PDF");
     }
   };
 
   return (
     <div className="w-full bg-white rounded-2xl shadow-xl">
+      <Toaster position="top-right" />
       <div className="p-4 sm:p-6 lg:p-8">
         <div className="border border-gray-200 rounded-md py-2 px-4 mb-4">
           <div className="flex flex-col-reverse sm:flex-row items-start justify-between mb-2">
@@ -346,8 +390,8 @@ export default function EditPrescription({
 
             <div className="mt-2 flex flex-row gap-2">
               <button
-                type="submit"
                 className="w-full px-4 py-2 text-black transition-colors duration-200 border border-black rounded-md hover:bg-black hover:text-white"
+                onClick={handlePrint}
               >
                 Print Prescription
               </button>
@@ -355,8 +399,9 @@ export default function EditPrescription({
                 type="submit"
                 className="w-full px-4 py-2 text-white transition-colors duration-200 bg-gray-800 rounded-md hover:bg-black"
                 onClick={handleSubmit}
+                disabled={isSubmitting}
               >
-                Update Prescription
+                {isSubmitting ? "Updating..." : "Update Prescription"}
               </button>
             </div>
           </div>
