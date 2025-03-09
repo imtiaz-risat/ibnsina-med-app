@@ -37,7 +37,7 @@
   openssl rand -base64 32
   ```
 
-- Or you can generate a 32 digit random string from here: https://jwtsecret.com/generate
+- Or you can generate a 32-digit random string from here: https://jwtsecret.com/generate
 
 ## Prisma and PostgreSQL Setup
 
@@ -70,6 +70,32 @@
     INSERT INTO public."Admin" (id, username, password) VALUES ('1', 'admin', 'admin123');
     ```
 
+## Running the Application on Multiple Devices
+
+### Using the Application Over a Local Network (Without Internet)
+
+1. On the **server-side device** (the device running the application):
+   - Open the terminal and run:
+     ```bash
+     ipconfig  # For Windows
+     ifconfig  # For macOS/Linux (if installed)
+     ```
+   - Look for the **IPv4 Address** under the active network connection (e.g., `192.168.x.x`).
+
+2. Start the application on the server device:
+   ```bash
+   npm run dev
+   ```
+
+3. On the **client device** (another device on the same network):
+   - Open a web browser and navigate to:
+     ```
+     http://192.168.x.x:3000
+     ```
+   - Replace `192.168.x.x` with the actual IP address from Step 1.
+   - Now you can access the application from another device connected to the same network.
+
+
 ## Routes
 
 - Here is a list of all the pages in the app with their routing URLs:
@@ -87,3 +113,4 @@
   - `/admin` - Admin panel
   - `/admin/add-doctor` - Add new doctor
   - `/admin/doctor-list` - List of all doctors
+
