@@ -191,7 +191,7 @@ const PrescriptionPDF = ({ prescription }) => {
                 <Text style={styles.sectionHeader}>Patient Complaints</Text>
                 <View style={styles.sectionContent}>
                   {prescription.complaints.map((item, index) => (
-                    <Text key={index} style={styles.sectionItem}>
+                    <Text key={`complaint-${index}`} style={styles.sectionItem}>
                       {item.topic} : {item.value}
                     </Text>
                   ))}
@@ -207,7 +207,10 @@ const PrescriptionPDF = ({ prescription }) => {
                 <Text style={styles.sectionHeader}>Personal History</Text>
                 <View style={styles.sectionContent}>
                   {prescription.personalHistory.map((item, index) => (
-                    <Text key={index} style={styles.sectionItem}>
+                    <Text
+                      key={`personalHistory-${index}`}
+                      style={styles.sectionItem}
+                    >
                       {item.topic} : {item.value}
                     </Text>
                   ))}
@@ -223,7 +226,10 @@ const PrescriptionPDF = ({ prescription }) => {
                 <Text style={styles.sectionHeader}>Family History</Text>
                 <View style={styles.sectionContent}>
                   {prescription.familyHistory.map((item, index) => (
-                    <Text key={index} style={styles.sectionItem}>
+                    <Text
+                      key={`familyHistory-${index}`}
+                      style={styles.sectionItem}
+                    >
                       {item.topic} : {item.value}
                     </Text>
                   ))}
@@ -239,7 +245,10 @@ const PrescriptionPDF = ({ prescription }) => {
                 <Text style={styles.sectionHeader}>Medical History</Text>
                 <View style={styles.sectionContent}>
                   {prescription.medicalHistory.map((item, index) => (
-                    <Text key={index} style={styles.sectionItem}>
+                    <Text
+                      key={`medicalHistory-${index}`}
+                      style={styles.sectionItem}
+                    >
                       {item.topic} : {item.value}
                     </Text>
                   ))}
@@ -255,7 +264,10 @@ const PrescriptionPDF = ({ prescription }) => {
                 <Text style={styles.sectionHeader}>Surgical History</Text>
                 <View style={styles.sectionContent}>
                   {prescription.surgicalHistory.map((item, index) => (
-                    <Text key={index} style={styles.sectionItem}>
+                    <Text
+                      key={`surgicalHistory-${index}`}
+                      style={styles.sectionItem}
+                    >
                       {item.topic} : {item.value}
                     </Text>
                   ))}
@@ -271,7 +283,10 @@ const PrescriptionPDF = ({ prescription }) => {
                 <Text style={styles.sectionHeader}>Drug History</Text>
                 <View style={styles.sectionContent}>
                   {prescription.drugHistory.map((item, index) => (
-                    <Text key={index} style={styles.sectionItem}>
+                    <Text
+                      key={`drugHistory-${index}`}
+                      style={styles.sectionItem}
+                    >
                       {item.topic} : {item.value}
                     </Text>
                   ))}
@@ -287,8 +302,8 @@ const PrescriptionPDF = ({ prescription }) => {
                 <Text style={styles.sectionHeader}>Examinations Findings</Text>
                 <View style={styles.sectionContent}>
                   {prescription.examinationFinding.map((item, index) => (
-                    <View>
-                      <Text key={index} style={styles.sectionItem}>
+                    <View key={`examinationFinding-${index}`}>
+                      <Text style={styles.sectionItem}>
                         {item.topic} : {item.value}
                       </Text>
                       {item.topic === "Breast" && (
@@ -323,7 +338,7 @@ const PrescriptionPDF = ({ prescription }) => {
                 <Text style={styles.sectionHeader}>Diagnosis</Text>
                 <View style={styles.sectionContent}>
                   {prescription.diagnosis.map((item, index) => (
-                    <Text key={index} style={styles.sectionItem}>
+                    <Text key={`diagnosis-${index}`} style={styles.sectionItem}>
                       {item.topic} : {item.value}
                     </Text>
                   ))}
@@ -339,7 +354,10 @@ const PrescriptionPDF = ({ prescription }) => {
                 <Text style={styles.sectionHeader}>Management Plan</Text>
                 <View style={styles.sectionContent}>
                   {prescription.managementPlan.map((item, index) => (
-                    <Text key={index} style={styles.sectionItem}>
+                    <Text
+                      key={`managementPlan-${index}`}
+                      style={styles.sectionItem}
+                    >
                       {item.topic} : {item.value}
                     </Text>
                   ))}
@@ -356,7 +374,10 @@ const PrescriptionPDF = ({ prescription }) => {
                 <Text style={styles.sectionHeader}>Investigation</Text>
                 <View style={styles.sectionContent}>
                   {prescription.investigation.map((item, index) => (
-                    <Text key={index} style={styles.sectionItem}>
+                    <Text
+                      key={`investigation-${index}`}
+                      style={styles.sectionItem}
+                    >
                       {item.topic} : {item.value}
                     </Text>
                   ))}
@@ -371,7 +392,7 @@ const PrescriptionPDF = ({ prescription }) => {
             <View>
               {prescription.treatments?.length > 0 ? (
                 prescription.treatments.map((treatment, index) => (
-                  <View key={index} style={styles.treatmentItem}>
+                  <View key={`treatment-${index}`} style={styles.treatmentItem}>
                     <Text style={styles.treatmentHeader}>
                       {index + 1}. {treatment.drugName}
                     </Text>
@@ -391,7 +412,7 @@ const PrescriptionPDF = ({ prescription }) => {
               <View style={styles.sectionContent}>
                 {prescription.advice?.length > 0 ? (
                   prescription.advice.map((item, index) => (
-                    <Text key={index} style={styles.sectionItem}>
+                    <Text key={`advice-${index}`} style={styles.sectionItem}>
                       {item.topic} : {item.value}
                     </Text>
                   ))

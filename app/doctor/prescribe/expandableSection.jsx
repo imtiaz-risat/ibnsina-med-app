@@ -51,7 +51,7 @@ function TopicInput({ suggestions, onAdd }) {
           className="w-full px-2 py-1 text-sm border border-gray-200 rounded-md focus:border-black outline-none"
         />
         {showSuggestions && (
-          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-32 overflow-y-auto z-10">
+          <div className="absolute w-fit top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-32 overflow-y-auto z-10">
             {filteredSuggestions.map((suggestion) => (
               <button
                 key={suggestion}
@@ -59,7 +59,7 @@ function TopicInput({ suggestions, onAdd }) {
                   setTopic(suggestion);
                   setShowSuggestions(false);
                 }}
-                className="w-full px-2 py-1 text-sm text-left hover:bg-gray-50"
+                className="w-full px-2 py-1 text-sm text-left hover:bg-gray-50 whitespace-nowrap"
               >
                 {suggestion}
               </button>

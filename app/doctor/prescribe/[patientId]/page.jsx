@@ -16,12 +16,27 @@ async function getPatientData(patientId) {
   }
 }
 
+async function getPresetData() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/presets`);
+    if (!res.ok) throw new Error("Failed to fetch presets");
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error("Presets fetch error:", error);
+    return null;
+  }
+}
+
 export default async function CreatePrescription({ params }) {
   const patientData = await getPatientData(params.patientId);
 
   if (!patientData) {
     return <>Patient does not exist</>;
   }
+
+  const presetData = await getPresetData();
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -30,6 +45,7 @@ export default async function CreatePrescription({ params }) {
           patientId={params.patientId}
           patientData={patientData}
           isEditMode={false}
+          presetData={presetData}
         />
       </Suspense>
     </div>

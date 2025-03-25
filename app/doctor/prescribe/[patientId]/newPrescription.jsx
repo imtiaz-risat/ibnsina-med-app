@@ -5,6 +5,8 @@ import AttachmentBox from "../attachmentBox";
 import TreatmentBox from "../treatmentBox";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { pdf } from "@react-pdf/renderer";
+import PrescriptionPDF from "../../../components/prescriptionPDF";
 
 // Sample suggestions for each section
 const complaintSuggestions = [
@@ -40,7 +42,11 @@ const adviceSuggestions = [
   "Avoid stress",
 ];
 
-export default function NewPrescription({ patientId, patientData }) {
+export default function NewPrescription({
+  patientId,
+  patientData,
+  presetData,
+}) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -133,6 +139,48 @@ export default function NewPrescription({ patientId, patientData }) {
     }
   };
 
+  const handlePrint = async (e) => {
+    e.preventDefault();
+
+    try {
+      const pdfBlob = await pdf(
+        <PrescriptionPDF
+          prescription={{
+            patientName: patientData.name,
+            patientId: patientData.id,
+            age: patientData.age,
+            gender: patientData.gender,
+            maritalStatus: patientData.maritalStatus,
+            prescriptionDateCreated: new Date().toISOString(),
+            doctorName: "Dr. Example Name", // Replace with actual doctor name
+            complaints: formData.complaints,
+            treatments: formData.treatments,
+            advice: formData.advice,
+            personalHistory: formData.personalHistory,
+            familyHistory: formData.familyHistory,
+            medicalHistory: formData.medicalHistory,
+            drugHistory: formData.drugHistory,
+            surgicalHistory: formData.surgicalHistory,
+            examinationFinding: formData.examinationFinding,
+            diagnosis: formData.diagnosis,
+            managementPlan: formData.managementPlan,
+            investigation: formData.investigation,
+            hasNextVisit: formData.hasNextVisit,
+            nextVisitDate: formData.nextVisitDate,
+          }}
+        />
+      ).toBlob();
+
+      const url = URL.createObjectURL(pdfBlob);
+      const win = window.open(url);
+      // win.onload = () => win.print();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("PDF generation failed:", error);
+      toast.error("Failed to generate PDF");
+    }
+  };
+
   return (
     <div className="w-full bg-white rounded-2xl shadow-xl">
       <div className="p-4 sm:p-6 lg:p-8">
@@ -192,7 +240,7 @@ export default function NewPrescription({ patientId, patientData }) {
             <ExpandableSection
               title="Patient Complaints"
               defaultExpanded={false}
-              suggestions={complaintSuggestions}
+              suggestions={presetData.complaintPresets}
               onUpdate={(data) => updateFormData("complaints", data)}
             />
             <ExpandableSection
@@ -202,7 +250,7 @@ export default function NewPrescription({ patientId, patientData }) {
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={complaintSuggestions}
+              suggestions={presetData.personalHistoryPresets}
               onUpdate={(data) => updateFormData("personalHistory", data)}
             />
             <ExpandableSection
@@ -212,7 +260,7 @@ export default function NewPrescription({ patientId, patientData }) {
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={complaintSuggestions}
+              suggestions={presetData.familyHistoryPresets}
               onUpdate={(data) => updateFormData("familyHistory", data)}
             />
             <ExpandableSection
@@ -222,7 +270,7 @@ export default function NewPrescription({ patientId, patientData }) {
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={complaintSuggestions}
+              suggestions={presetData.medicalHistoryPresets}
               onUpdate={(data) => updateFormData("medicalHistory", data)}
             />
             <ExpandableSection
@@ -232,7 +280,7 @@ export default function NewPrescription({ patientId, patientData }) {
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={complaintSuggestions}
+              suggestions={presetData.surgicalHistoryPresets}
               onUpdate={(data) => updateFormData("surgicalHistory", data)}
             />
             <ExpandableSection
@@ -242,7 +290,7 @@ export default function NewPrescription({ patientId, patientData }) {
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={complaintSuggestions}
+              suggestions={presetData.drugHistoryPresets}
               onUpdate={(data) => updateFormData("drugHistory", data)}
             />
             <ExpandableSection
@@ -252,7 +300,7 @@ export default function NewPrescription({ patientId, patientData }) {
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={complaintSuggestions}
+              suggestions={presetData.examFindingPresets}
               onUpdate={(data) => updateFormData("examinationFinding", data)}
             />
             <ExpandableSection
@@ -262,7 +310,7 @@ export default function NewPrescription({ patientId, patientData }) {
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={complaintSuggestions}
+              suggestions={presetData.diagnosisPresets}
               onUpdate={(data) => updateFormData("diagnosis", data)}
             />
             <ExpandableSection
@@ -272,7 +320,7 @@ export default function NewPrescription({ patientId, patientData }) {
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={complaintSuggestions}
+              suggestions={presetData.managementPlanPresets}
               onUpdate={(data) => updateFormData("managementPlan", data)}
             />
             <ExpandableSection
@@ -282,7 +330,7 @@ export default function NewPrescription({ patientId, patientData }) {
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={complaintSuggestions}
+              suggestions={presetData.investigationPresets}
               onUpdate={(data) => updateFormData("investigation", data)}
             />
           </div>
@@ -295,7 +343,7 @@ export default function NewPrescription({ patientId, patientData }) {
             <ExpandableSection
               title="Advice"
               defaultExpanded={true}
-              suggestions={adviceSuggestions}
+              suggestions={presetData.advicePresets}
               onUpdate={(data) => updateFormData("advice", data)}
             />
             <AttachmentBox
@@ -335,8 +383,8 @@ export default function NewPrescription({ patientId, patientData }) {
 
             <div className="mt-2 flex flex-row gap-2">
               <button
-                type="submit"
                 className="w-full px-4 py-2 text-black transition-colors duration-200 border border-black rounded-md hover:bg-black hover:text-white"
+                onClick={handlePrint}
               >
                 Print Prescription
               </button>

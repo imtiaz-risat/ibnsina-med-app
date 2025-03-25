@@ -8,6 +8,7 @@ import Loading from "./loading";
 const DoctorLayout = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const handleRouteChangeStart = () => setIsLoading(true);
@@ -37,9 +38,10 @@ const DoctorLayout = ({ children }) => {
 
         {/* Page Content */}
         <main
-          className={`flex-1 p-6 pt-20 bg-gray-100 ${
-            isOpen ? "ml-[200px]" : "ml-[50px]"
-          } transition-all duration-400`}
+          className={`flex-1 p-6 pt-20 bg-gray-100 transition-all duration-400`}
+          style={{
+            marginLeft: isOpen || isHovered ? "200px" : "50px",
+          }}
         >
           {isLoading ? <Loading /> : children}
         </main>

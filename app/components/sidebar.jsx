@@ -9,22 +9,29 @@ import Link from "next/link";
 import Image from "next/image";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Determine if sidebar should be expanded
+  const shouldExpand = isOpen || isHovered;
+
   return (
     <motion.nav
       layout
       className="fixed z-20 h-screen shrink-0 border-r border-slate-300 bg-white transition-width duration-400 ease-in-out"
       style={{
-        width: isOpen ? "200px" : "50px",
+        width: shouldExpand ? "200px" : "50px",
       }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Logo */}
       <div
         className={`flex py-4 ${
-          isOpen ? "justify-start px-4" : "justify-center"
+          shouldExpand ? "justify-start px-4" : "justify-center"
         }`}
       >
         <Image src="/logo-black.svg" alt="Logo" width={20} height={20} />
-        {isOpen && (
+        {shouldExpand && (
           <span className={`text-xl font-semibold ml-2`}>Prescribed</span>
         )}
       </div>
@@ -35,43 +42,43 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       {/* Menu Items */}
       <div
         className={`flex flex-col ${
-          isOpen ? "items-start px-2" : "items-center"
+          shouldExpand ? "items-start px-2" : "items-center"
         }`}
       >
         <Option
           Icon={FiHome}
           title="Dashboard"
-          isOpen={isOpen}
+          isOpen={shouldExpand}
           path="/doctor"
         />
         <Option
           Icon={FiUsers}
           title="Patients"
-          isOpen={isOpen}
+          isOpen={shouldExpand}
           path="/doctor/patients"
         />
         <Option
           Icon={LuUserPlus}
           title="New Registration"
-          isOpen={isOpen}
+          isOpen={shouldExpand}
           path="/doctor/new-registration"
         />
         <Option
           Icon={TfiWrite}
           title="Prescription"
-          isOpen={isOpen}
+          isOpen={shouldExpand}
           path="/doctor/prescribe"
         />
         <Option
           Icon={LuSquareUser}
           title="Profile"
-          isOpen={isOpen}
+          isOpen={shouldExpand}
           path="/doctor/profile"
         />
         <Option
           Icon={LuSettings}
           title="Settings"
-          isOpen={isOpen}
+          isOpen={shouldExpand}
           path="/doctor/settings"
         />
       </div>

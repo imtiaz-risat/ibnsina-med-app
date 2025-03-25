@@ -171,3 +171,65 @@ model PatientInvestigation {
   attribute String
   value     String?
 }
+
+// Presets Models
+
+model Complaint {
+  id         Int    @id @default(autoincrement())
+  complaint  String
+}
+
+model PersonalHistory {
+  id              Int    @id @default(autoincrement())
+  personalHistory String
+}
+
+model FamilyHistory {
+  id            Int    @id @default(autoincrement())
+  familyHistory String
+}
+
+model DrugHistory {
+  id         Int    @id @default(autoincrement())
+  drugHistory String
+}
+
+model ExamFinding {
+  id         Int    @id @default(autoincrement())
+  examFinding String
+}
+
+model Diagnosis {
+  id        Int    @id @default(autoincrement())
+  diagnosis String
+}
+
+model MedicalHistory {
+  id             Int    @id @default(autoincrement())
+  medicalHistory String
+}
+
+model SurgicalHistory {
+  id            Int    @id @default(autoincrement())
+  surgicalHistory String
+}
+
+model Treatment {
+  id        Int    @id @default(autoincrement())
+  treatment String
+}
+
+model ManagementPlan {
+  id             Int    @id @default(autoincrement())
+  managementPlan String
+}
+
+model Investigation {
+  id           Int    @id @default(autoincrement())
+  investigation String
+}
+
+model Advice {
+  id     Int    @id @default(autoincrement())
+  advice String
+}
