@@ -5,10 +5,12 @@ import { useState, useEffect } from "react";
 import { SlUser, SlUserFemale } from "react-icons/sl";
 import { FiEdit, FiPrinter, FiTrash2 } from "react-icons/fi";
 import { toast, Toaster } from "react-hot-toast";
+import EditPatientForm from "./editPatientForm";
 
 export default function PatientProfile({ initialData, prescriptions }) {
   const [patient, setPatient] = useState(initialData);
   const [allPrescriptions, setAllPrescriptions] = useState(prescriptions);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
 
   const handleDelete = async (prescriptionId) => {
     if (confirm("Are you sure you want to delete this prescription?")) {
@@ -37,6 +39,27 @@ export default function PatientProfile({ initialData, prescriptions }) {
     }
   };
 
+  const handleUpdatePatient = (updatedPatient) => {
+    setPatient(updatedPatient);
+    toast.success("Patient profile updated successfully");
+  };
+
+  const handlePrint = (prescriptionId) => {
+    // Open the prescription in print view
+    const printWindow = window.open(
+      `/doctor/prescribe/print/${prescriptionId}`,
+      "_blank"
+    );
+    if (printWindow) {
+      // If the new window was successfully opened, trigger print when it loads
+      printWindow.addEventListener("load", () => {
+        printWindow.print();
+      });
+    } else {
+      toast.error("Please allow pop-ups to print prescriptions");
+    }
+  };
+
   return (
     <div>
       <Toaster />
@@ -57,12 +80,18 @@ export default function PatientProfile({ initialData, prescriptions }) {
             </div>
           </div>
           <div className="flex gap-4">
-            <button className="px-4 py-2 border rounded-md hover:bg-gray-50">
-              Edit Profile
+            <button
+              onClick={() => setIsEditFormOpen(true)}
+              className="px-4 py-2 border rounded-md hover:bg-gray-50 flex items-center gap-2"
+            >
+              <FiEdit size={16} /> Edit Profile
             </button>
-            <button className="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-black">
+            <Link
+              href={`/doctor/prescribe/${patient.id}`}
+              className="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-black"
+            >
               New Prescription
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -189,6 +218,15 @@ export default function PatientProfile({ initialData, prescriptions }) {
             </div>
           </div>
         </div>
+
+        {/* Edit form dialog */}
+        {isEditFormOpen && (
+          <EditPatientForm
+            patient={patient}
+            onClose={() => setIsEditFormOpen(false)}
+            onUpdate={handleUpdatePatient}
+          />
+        )}
       </div>
     </div>
   );

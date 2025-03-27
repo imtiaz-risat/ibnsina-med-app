@@ -35,6 +35,48 @@ export async function GET(request, { params }) {
   }
 }
 
+export async function PUT(request, { params }) {
+  try {
+    const data = await request.json();
+    const patientId = parseInt(params.id);
+
+    // Validate the patient exists
+    const existingPatient = await prisma.patient.findUnique({
+      where: { id: patientId },
+    });
+
+    if (!existingPatient) {
+      return NextResponse.json({ error: "Patient not found" }, { status: 404 });
+    }
+
+    // Update the patient information
+    const updatedPatient = await prisma.patient.update({
+      where: { id: patientId },
+      data: {
+        name: data.name,
+        dateOfBirth: data.dateOfBirth
+          ? new Date(data.dateOfBirth)
+          : existingPatient.dateOfBirth,
+        gender: data.gender,
+        maritalStatus: data.maritalStatus,
+        district: data.district,
+        occupation: data.occupation,
+        refBy: data.refBy,
+        phone: data.phone,
+        note: data.note,
+      },
+    });
+
+    return NextResponse.json(updatedPatient);
+  } catch (error) {
+    console.error("Patient update error:", error);
+    return NextResponse.json(
+      { error: "Failed to update patient", details: error.message },
+      { status: 500 }
+    );
+  }
+}
+
 function calculateAge(dateOfBirth) {
   const dob = new Date(dateOfBirth);
   const today = new Date();
