@@ -27,7 +27,7 @@ function TopicInput({ suggestions, onAdd }) {
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const handleAdd = () => {
-    if (topic.trim() && value.trim()) {
+    if (topic.trim()) {
       onAdd(topic.trim(), value.trim());
       setTopic("");
       setValue("");
@@ -71,12 +71,12 @@ function TopicInput({ suggestions, onAdd }) {
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Enter value"
+        placeholder="Enter value (optional)"
         className="flex-1 px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-black outline-none"
       />
       <button
         onClick={handleAdd}
-        disabled={!topic.trim() || !value.trim()}
+        disabled={!topic.trim()}
         className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-800 disabled:bg-blue-300 disabled:cursor-not-allowed"
       >
         Add
