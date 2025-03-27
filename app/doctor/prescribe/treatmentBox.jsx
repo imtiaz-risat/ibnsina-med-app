@@ -64,7 +64,7 @@ function SectionHeader({
   return (
     <div
       onClick={onToggle}
-      className="flex items-center justify-between bg-black text-white p-2 rounded-t-md cursor-pointer group"
+      className="flex items-center justify-between bg-blue-500 text-white p-2 rounded-t-md cursor-pointer group"
     >
       <h2 className="text-sm font-medium">
         {title}
@@ -118,7 +118,7 @@ function TreatmentInput({ onAdd }) {
       return null;
 
     return (
-      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-32 overflow-y-auto z-10">
+      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-blue-200 rounded-md shadow-lg max-h-32 overflow-y-auto z-10">
         {filteredSuggestions.map((suggestion) => (
           <button
             key={suggestion}
@@ -126,7 +126,7 @@ function TreatmentInput({ onAdd }) {
               setValue(suggestion);
               setShowSuggestions((prev) => ({ ...prev, [field]: false }));
             }}
-            className="w-full px-2 py-1 text-sm text-left hover:bg-gray-50"
+            className="w-full px-2 py-1 text-sm text-left hover:bg-blue-50"
           >
             {suggestion}
           </button>
@@ -154,7 +154,7 @@ function TreatmentInput({ onAdd }) {
               )
             }
             placeholder="Drug name"
-            className="w-full px-2 py-1 text-sm border border-gray-200 rounded-md focus:border-black outline-none"
+            className="w-full px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
           />
           {renderSuggestionsList("drugName", drugName, setDrugName)}
         </div>
@@ -173,7 +173,7 @@ function TreatmentInput({ onAdd }) {
               )
             }
             placeholder="Dose"
-            className="w-full px-2 py-1 text-sm border border-gray-200 rounded-md focus:border-black outline-none"
+            className="w-full px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
           />
           {renderSuggestionsList("dose", dose, setDose)}
         </div>
@@ -192,7 +192,7 @@ function TreatmentInput({ onAdd }) {
               )
             }
             placeholder="Rule"
-            className="w-full px-2 py-1 text-sm border border-gray-200 rounded-md focus:border-black outline-none"
+            className="w-full px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
           />
           {renderSuggestionsList("rule", rule, setRule)}
         </div>
@@ -212,7 +212,7 @@ function TreatmentInput({ onAdd }) {
               )
             }
             placeholder="Duration"
-            className="w-full px-2 py-1 text-sm border border-gray-200 rounded-md focus:border-black outline-none"
+            className="w-full px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
           />
           {renderSuggestionsList("duration", duration, setDuration)}
         </div>
@@ -222,7 +222,7 @@ function TreatmentInput({ onAdd }) {
         disabled={
           !drugName.trim() || !dose.trim() || !rule.trim() || !duration.trim()
         }
-        className="w-full px-3 py-1 text-sm bg-black text-white rounded-md hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed"
+        className="w-full px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-800 disabled:bg-blue-300 disabled:cursor-not-allowed"
       >
         Add Treatment
       </button>
@@ -263,7 +263,7 @@ function TreatmentItem({ item, onEdit, onDelete }) {
 
   if (isEditing) {
     return (
-      <div className="p-2 bg-gray-50 rounded-md space-y-2">
+      <div className="p-2 bg-blue-50 rounded-md space-y-2">
         <div className="grid grid-cols-4 gap-2">
           <input
             type="text"
@@ -272,7 +272,7 @@ function TreatmentItem({ item, onEdit, onDelete }) {
               setEditedItem({ ...editedItem, drugName: e.target.value })
             }
             placeholder="Drug name"
-            className="px-2 py-1 text-sm border border-gray-200 rounded-md focus:border-black outline-none"
+            className="px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
           />
           <input
             type="text"
@@ -281,7 +281,7 @@ function TreatmentItem({ item, onEdit, onDelete }) {
               setEditedItem({ ...editedItem, dose: e.target.value })
             }
             placeholder="Dose"
-            className="px-2 py-1 text-sm border border-gray-200 rounded-md focus:border-black outline-none"
+            className="px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
           />
           <input
             type="text"
@@ -290,7 +290,7 @@ function TreatmentItem({ item, onEdit, onDelete }) {
               setEditedItem({ ...editedItem, rule: e.target.value })
             }
             placeholder="Rule"
-            className="px-2 py-1 text-sm border border-gray-200 rounded-md focus:border-black outline-none"
+            className="px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
           />
           <input
             type="text"
@@ -299,7 +299,7 @@ function TreatmentItem({ item, onEdit, onDelete }) {
               setEditedItem({ ...editedItem, duration: e.target.value })
             }
             placeholder="Duration"
-            className="px-2 py-1 text-sm border border-gray-200 rounded-md focus:border-black outline-none"
+            className="px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
           />
         </div>
         <div className="flex justify-end">
@@ -311,7 +311,7 @@ function TreatmentItem({ item, onEdit, onDelete }) {
               !editedItem.rule.trim() ||
               !editedItem.duration.trim()
             }
-            className="flex items-center gap-1 px-2 py-1 text-sm bg-black text-white rounded-md hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            className="flex items-center gap-1 px-2 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-800 disabled:bg-blue-300 disabled:cursor-not-allowed"
           >
             <FiCheck className="w-3.5 h-3.5" />
             Save
@@ -322,7 +322,7 @@ function TreatmentItem({ item, onEdit, onDelete }) {
   }
 
   return (
-    <div className="flex items-center justify-between p-2 bg-gray-50 rounded-md group">
+    <div className="flex items-center justify-between p-2 bg-blue-50 rounded-md group">
       <div className="grid grid-cols-4 gap-2 flex-1">
         <span className="text-sm">{item.drugName}</span>
         <span className="text-sm">{item.dose}</span>
@@ -332,13 +332,13 @@ function TreatmentItem({ item, onEdit, onDelete }) {
       <div className="flex items-center gap-1">
         <button
           onClick={() => setIsEditing(true)}
-          className="px-2 py-1 text-xs border border-gray-200 rounded-md hover:bg-gray-100 mr-1"
+          className="px-2 py-1 text-xs border border-blue-200 rounded-md hover:bg-blue-100 mr-1"
         >
           Edit
         </button>
         <button
           onClick={onDelete}
-          className="px-2 py-1 text-xs text-red-600 border border-gray-200 rounded-md hover:bg-red-50"
+          className="px-2 py-1 text-xs text-red-600 border border-blue-200 rounded-md hover:bg-red-50"
         >
           Delete
         </button>
@@ -371,14 +371,14 @@ function TreatmentBox({ initialItems = [], onUpdate }) {
   }, [items, onUpdate]);
 
   return (
-    <div className="border border-gray-200 rounded-md">
+    <div className="border border-blue-200 rounded-md">
       <SectionHeader
         onToggle={() => setIsExpanded(!isExpanded)}
         isExpanded={isExpanded}
         itemCount={items.length}
       />
       {isExpanded && (
-        <div className="p-2 border-t border-gray-200">
+        <div className="p-2 border-t border-blue-200">
           <TreatmentInput onAdd={handleAdd} />
           <TreatmentList
             items={items}

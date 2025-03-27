@@ -126,26 +126,26 @@ export default function PrescriptionForm({
   return (
     <div className="w-full bg-white rounded-2xl shadow-xl">
       <div className="p-4 sm:p-6 lg:p-8">
-        <div className="border border-gray-200 rounded-md py-2 px-4 mb-4">
+        <div className="border border-blue-200 rounded-md py-2 px-4 mb-4">
           <div className="flex flex-col-reverse sm:flex-row items-start justify-between mb-2">
             <div className="flex flex-row items-center">
               Patient ID{" "}
               <input
                 type="text"
                 placeholder="Patient ID"
-                className="mt-1 ml-2 text-sm border-b border-gray-200 focus:border-black outline-none"
+                className="mt-1 ml-2 text-sm border-b border-blue-200 focus:border-blue-500 outline-none"
                 value={patientData.id}
                 onChange={(e) =>
                   setPatientData({ ...patientData, id: e.target.value })
                 }
               />
             </div>
-            <p className="text-sm text-gray-600">Date: 03-Feb-2025</p>
+            <p className="text-sm text-blue-600">Date: 03-Feb-2025</p>
           </div>
           <div className="flex flex-row items-baseline mb-2">
             <div className="font-semibold mr-4 ">
               Patient Name:{" "}
-              <span className="border-b border-gray-200">
+              <span className="border-b border-blue-200">
                 {patientData.name}
               </span>
             </div>
@@ -153,19 +153,19 @@ export default function PrescriptionForm({
               <div className="flex flex-row items-center justify-between space-x-4">
                 <div className="text-sm text-gray-600 mr-4">
                   Age:{" "}
-                  <span className="border-b border-gray-200">
+                  <span className="border-b border-blue-200">
                     {patientData.age}
                   </span>
                 </div>
                 <div className="text-sm text-gray-600 mr-4">
                   Gender:{" "}
-                  <span className="border-b border-gray-200">
+                  <span className="border-b border-blue-200">
                     {patientData.gender}
                   </span>
                 </div>
               </div>
               <button
-                className="bg-gray-800 text-white hover:bg-black text-sm px-2 py-1 rounded"
+                className="bg-blue-800 text-white hover:bg-blue-500 text-sm px-2 py-1 rounded"
                 onClick={() => handleViewProfile()}
               >
                 View Profile
@@ -256,7 +256,7 @@ export default function PrescriptionForm({
                 updateFormData("attachments", attachments)
               }
             />
-            <div className="mt-4 p-3 border border-gray-200 rounded-md">
+            <div className="mt-4 p-3 border border-blue-200 rounded-md">
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-2">
                   <input
@@ -265,9 +265,9 @@ export default function PrescriptionForm({
                     onChange={(e) =>
                       updateFormData("hasNextVisit", e.target.checked)
                     }
-                    className="h-4 w-4 text-black border-gray-300 rounded focus:ring-black"
+                    className="h-4 w-4 text-blue-500 border-blue-300 rounded focus:ring-blue-500"
                   />
-                  <label className="text-sm font-medium text-gray-900">
+                  <label className="text-sm font-medium text-blue-900">
                     Next Visit Date/Follow Up
                   </label>
                 </div>
@@ -279,7 +279,7 @@ export default function PrescriptionForm({
                   }
                   disabled={!formData.hasNextVisit}
                   min={new Date().toISOString().split("T")[0]}
-                  className="w-48 px-2 py-1 text-sm border border-gray-200 rounded-md focus:border-black outline-none disabled:bg-gray-50 disabled:text-gray-500"
+                  className="w-48 px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none disabled:bg-blue-50 disabled:text-blue-500"
                 />
               </div>
             </div>
@@ -287,13 +287,13 @@ export default function PrescriptionForm({
             <div className="mt-2 flex flex-row gap-2">
               <button
                 type="submit"
-                className="w-full px-4 py-2 text-black transition-colors duration-200 border border-black rounded-md hover:bg-black hover:text-white"
+                className="w-full px-4 py-2 text-blue-500 transition-colors duration-200 border border-blue-500 rounded-md hover:bg-blue-500 hover:text-white"
               >
                 Print Prescription
               </button>
               <button
                 type="submit"
-                className="w-full px-4 py-2 text-white transition-colors duration-200 bg-gray-800 rounded-md hover:bg-black"
+                className="w-full px-4 py-2 text-white transition-colors duration-200 bg-blue-800 rounded-md hover:bg-blue-500"
                 onClick={handleSubmit}
               >
                 Save Prescription

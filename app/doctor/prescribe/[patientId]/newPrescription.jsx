@@ -226,7 +226,7 @@ export default function NewPrescription({
                 </div>
               </div>
               <button
-                className="bg-gray-800 text-white hover:bg-black text-sm px-2 py-1 rounded"
+                className="bg-blue-500 text-white hover:bg-blue-600 text-sm px-2 py-1 rounded"
                 onClick={() => handleViewProfile()}
               >
                 View Profile
@@ -383,14 +383,14 @@ export default function NewPrescription({
 
             <div className="mt-2 flex flex-row gap-2">
               <button
-                className="w-full px-4 py-2 text-black transition-colors duration-200 border border-black rounded-md hover:bg-black hover:text-white"
+                className="w-full px-4 py-2 text-blue-500 transition-colors duration-200 border border-blue-500 rounded-md hover:bg-blue-600 hover:text-white"
                 onClick={handlePrint}
               >
                 Print Prescription
               </button>
               <button
                 type="submit"
-                className="w-full px-4 py-2 text-white transition-colors duration-200 bg-gray-800 rounded-md hover:bg-black"
+                className="w-full px-4 py-2 text-white transition-colors duration-200 bg-blue-500 rounded-md hover:bg-blue-600"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
               >

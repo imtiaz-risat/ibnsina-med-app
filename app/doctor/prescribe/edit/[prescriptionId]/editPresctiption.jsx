@@ -181,14 +181,14 @@ export default function EditPrescription({
     <div className="w-full bg-white rounded-2xl shadow-xl">
       <Toaster position="top-right" />
       <div className="p-4 sm:p-6 lg:p-8">
-        <div className="border border-gray-200 rounded-md py-2 px-4 mb-4">
+        <div className="border border-blue-200 rounded-md py-2 px-4 mb-4">
           <div className="flex flex-col-reverse sm:flex-row items-start justify-between mb-2">
             <div className="flex flex-row items-center">
               Patient ID{" "}
               <input
                 type="text"
                 placeholder="Patient ID"
-                className="mt-1 ml-2 text-sm border-b border-gray-200 focus:border-black outline-none"
+                className="mt-1 ml-2 text-sm border-b border-gray-200 focus:border-gray-500 outline-none"
                 value={patientData.id}
                 onChange={(e) =>
                   setPatientData({ ...patientData, id: e.target.value })
@@ -220,7 +220,7 @@ export default function EditPrescription({
                 </div>
               </div>
               <button
-                className="bg-gray-800 text-white hover:bg-black text-sm px-2 py-1 rounded"
+                className="bg-blue-500 text-white hover:bg-blue-600 text-sm px-2 py-1 rounded"
                 onClick={() => handleViewProfile()}
               >
                 View Profile
@@ -377,7 +377,7 @@ export default function EditPrescription({
                 updateFormData("attachments", attachments)
               }
             />
-            <div className="mt-4 p-3 border border-gray-200 rounded-md">
+            <div className="mt-4 p-3 border border-blue-200 rounded-md">
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-2">
                   <input
@@ -386,7 +386,7 @@ export default function EditPrescription({
                     onChange={(e) =>
                       updateFormData("hasNextVisit", e.target.checked)
                     }
-                    className="h-4 w-4 text-black border-gray-300 rounded focus:ring-black"
+                    className="h-4 w-4 text-black border-blue-300 rounded focus:ring-gray-500"
                   />
                   <label className="text-sm font-medium text-gray-900">
                     Next Visit Date/Follow Up
@@ -407,14 +407,14 @@ export default function EditPrescription({
 
             <div className="mt-2 flex flex-row gap-2">
               <button
-                className="w-full px-4 py-2 text-black transition-colors duration-200 border border-black rounded-md hover:bg-black hover:text-white"
+                className="w-full px-4 py-2 text-blue-500 transition-colors duration-200 border border-blue-500 rounded-md hover:bg-blue-500 hover:text-white"
                 onClick={handlePrint}
               >
                 Print Prescription
               </button>
               <button
                 type="submit"
-                className="w-full px-4 py-2 text-white transition-colors duration-200 bg-gray-800 rounded-md hover:bg-black"
+                className="w-full px-4 py-2 text-white transition-colors duration-200 bg-blue-500 rounded-md hover:bg-blue-700"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
               >
