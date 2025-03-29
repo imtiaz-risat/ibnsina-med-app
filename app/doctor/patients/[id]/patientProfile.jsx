@@ -60,7 +60,7 @@ export default function PatientProfile({ initialData, prescriptions }) {
     }
   };
 
-  console.log(allPrescriptions);
+  // console.log(allPrescriptions);
 
   return (
     <div>
