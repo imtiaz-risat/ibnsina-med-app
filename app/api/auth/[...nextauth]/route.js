@@ -56,6 +56,7 @@ const authOptions = {
         token.role = user.role;
         token.firstname = user.firstname;
         token.lastname = user.lastname;
+        token.id = user.id;
       }
       // console.log("Callback token:", token);
       // console.log("Callback user:", user);
@@ -65,6 +66,7 @@ const authOptions = {
       session.user.role = token.role;
       session.user.firstname = token.firstname;
       session.user.lastname = token.lastname;
+      session.user.id = token.id;
       return session;
     },
   },
