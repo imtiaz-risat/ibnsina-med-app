@@ -60,6 +60,8 @@ export default function PatientProfile({ initialData, prescriptions }) {
     }
   };
 
+  console.log(allPrescriptions);
+
   return (
     <div>
       <Toaster />
@@ -162,7 +164,7 @@ export default function PatientProfile({ initialData, prescriptions }) {
                             prescription.dateCreated
                           ).toLocaleDateString()}
                         </td>
-                        <td className="py-3">{prescription.doctorId}</td>
+                        <td className="py-3">{prescription.doctorName}</td>
                         <td className="py-3 flex gap-2">
                           <Link
                             href={`/doctor/prescribe/edit/${prescription.id}`}

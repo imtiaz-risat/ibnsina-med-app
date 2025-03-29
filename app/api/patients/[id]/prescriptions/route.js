@@ -5,10 +5,33 @@ const prisma = new PrismaClient();
 
 export async function GET(request, { params }) {
   try {
+    // Fetch prescriptions with doctor information included
     const prescriptions = await prisma.prescription.findMany({
       where: { patientId: parseInt(params.id) },
+      include: {
+        doctor: {
+          select: {
+            firstname: true,
+            lastname: true,
+          },
+        },
+      },
+      orderBy: {
+        dateCreated: "desc", // Most recent prescriptions first
+      },
     });
-    return NextResponse.json(prescriptions);
+
+    // Map through the results to add doctorName field
+    const prescriptionsWithDoctorName = prescriptions.map((prescription) => {
+      return {
+        ...prescription,
+        doctorName: `${prescription.doctor.firstname} ${prescription.doctor.lastname}`,
+        // Optionally remove the doctor object if you don't need other doctor details
+        doctor: undefined,
+      };
+    });
+
+    return NextResponse.json(prescriptionsWithDoctorName);
   } catch (error) {
     console.error("Prescription fetch error:", error);
     return NextResponse.json(
