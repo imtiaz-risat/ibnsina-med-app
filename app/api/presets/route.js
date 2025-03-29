@@ -131,3 +131,197 @@ export async function GET() {
     });
   }
 }
+
+export async function POST(request) {
+  try {
+    const { type, value } = await request.json();
+
+    if (!type || !value) {
+      return new Response(
+        JSON.stringify({ error: "Type and value are required" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    let result;
+
+    switch (type) {
+      case "complaints":
+        result = await prisma.complaint.create({
+          data: { complaint: value },
+        });
+        break;
+      case "personalHistory":
+        result = await prisma.personalHistory.create({
+          data: { personalHistory: value },
+        });
+        break;
+      case "familyHistory":
+        result = await prisma.familyHistory.create({
+          data: { familyHistory: value },
+        });
+        break;
+      case "drugHistory":
+        result = await prisma.drugHistory.create({
+          data: { drugHistory: value },
+        });
+        break;
+      case "examFindings":
+        result = await prisma.examFinding.create({
+          data: { examFinding: value },
+        });
+        break;
+      case "diagnoses":
+        result = await prisma.diagnosis.create({
+          data: { diagnosis: value },
+        });
+        break;
+      case "medicalHistory":
+        result = await prisma.medicalHistory.create({
+          data: { medicalHistory: value },
+        });
+        break;
+      case "surgicalHistory":
+        result = await prisma.surgicalHistory.create({
+          data: { surgicalHistory: value },
+        });
+        break;
+      case "treatments":
+        result = await prisma.treatment.create({
+          data: { treatment: value },
+        });
+        break;
+      case "managementPlans":
+        result = await prisma.managementPlan.create({
+          data: { managementPlan: value },
+        });
+        break;
+      case "investigations":
+        result = await prisma.investigation.create({
+          data: { investigation: value },
+        });
+        break;
+      case "advices":
+        result = await prisma.advice.create({
+          data: { advice: value },
+        });
+        break;
+      default:
+        return new Response(JSON.stringify({ error: "Invalid preset type" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
+    }
+
+    return new Response(JSON.stringify({ success: true, data: result }), {
+      status: 201,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error("Error adding preset:", error);
+    return new Response(JSON.stringify({ error: "Failed to add preset" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+}
+
+export async function DELETE(request) {
+  try {
+    const { type, value } = await request.json();
+
+    if (!type || !value) {
+      return new Response(
+        JSON.stringify({ error: "Type and value are required" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    let result;
+
+    switch (type) {
+      case "complaints":
+        result = await prisma.complaint.deleteMany({
+          where: { complaint: value },
+        });
+        break;
+      case "personalHistory":
+        result = await prisma.personalHistory.deleteMany({
+          where: { personalHistory: value },
+        });
+        break;
+      case "familyHistory":
+        result = await prisma.familyHistory.deleteMany({
+          where: { familyHistory: value },
+        });
+        break;
+      case "drugHistory":
+        result = await prisma.drugHistory.deleteMany({
+          where: { drugHistory: value },
+        });
+        break;
+      case "examFindings":
+        result = await prisma.examFinding.deleteMany({
+          where: { examFinding: value },
+        });
+        break;
+      case "diagnoses":
+        result = await prisma.diagnosis.deleteMany({
+          where: { diagnosis: value },
+        });
+        break;
+      case "medicalHistory":
+        result = await prisma.medicalHistory.deleteMany({
+          where: { medicalHistory: value },
+        });
+        break;
+      case "surgicalHistory":
+        result = await prisma.surgicalHistory.deleteMany({
+          where: { surgicalHistory: value },
+        });
+        break;
+      case "treatments":
+        result = await prisma.treatment.deleteMany({
+          where: { treatment: value },
+        });
+        break;
+      case "managementPlans":
+        result = await prisma.managementPlan.deleteMany({
+          where: { managementPlan: value },
+        });
+        break;
+      case "investigations":
+        result = await prisma.investigation.deleteMany({
+          where: { investigation: value },
+        });
+        break;
+      case "advices":
+        result = await prisma.advice.deleteMany({
+          where: { advice: value },
+        });
+        break;
+      default:
+        return new Response(JSON.stringify({ error: "Invalid preset type" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
+    }
+
+    return new Response(JSON.stringify({ success: true, data: result }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error("Error deleting preset:", error);
+    return new Response(JSON.stringify({ error: "Failed to delete preset" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+}

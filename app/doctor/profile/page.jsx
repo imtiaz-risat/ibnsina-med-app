@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { LuUser, LuLoader2, LuX, LuCheck, LuAlertCircle } from "react-icons/lu";
+import { LuUser, LuX, LuCheck } from "react-icons/lu";
 
 export default function DoctorProfilePage() {
   const { data: session, status } = useSession();
@@ -153,7 +153,7 @@ export default function DoctorProfilePage() {
 
         {error && isEditing && (
           <div className="mb-4 p-3 bg-red-100 text-red-700 rounded flex items-center">
-            <LuAlertCircle className="mr-2" />
+            {/* <LuAlertCircle className="mr-2" /> */}
             {error}
           </div>
         )}
