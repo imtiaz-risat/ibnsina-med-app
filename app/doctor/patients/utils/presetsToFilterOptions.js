@@ -274,90 +274,94 @@ export function updateFilterOptionsCounts(filterOptions, patients) {
  * @returns {Array} - Filtered patients array
  */
 export function filterPatients(patients, selectedFilters, searchQuery = "") {
-  if (!patients) return [];
+    if (!patients) return [];
+    
+    return patients.filter(patient => {
+      // Search query filter: check name, id, phone, and note
+      const query = searchQuery.toLowerCase();
+      const matchesSearch = searchQuery ? (
+        patient.name.toLowerCase().includes(query) ||
+        patient.id.toString().includes(query) ||
+        (patient.phone && patient.phone.toLowerCase().includes(query)) ||
+        (patient.note && patient.note.toLowerCase().includes(query))
+      ) : true;
   
-  return patients.filter(patient => {
-    // Search query filter
-    const matchesSearch = searchQuery ? (
-      patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      patient.id.toString().includes(searchQuery.toLowerCase())
-    ) : true;
-
-    if (!matchesSearch) return false;
-
-    // Gender filter
-    const matchesGender = !selectedFilters.gender?.length || 
-      selectedFilters.gender.includes(patient.gender.toLowerCase());
-
-    if (!matchesGender) return false;
-
-    // Complaints filter
-    const matchesComplaints = !selectedFilters.complaints?.length || 
-      patient.Prescription?.some(prescription => 
-        prescription.PrescriptionComplaint?.some(complaint => 
-          selectedFilters.complaints.includes(complaint.complaint.toLowerCase().replace(/\s+/g, '_'))
-        )
-      );
-
-    if (!matchesComplaints) return false;
-
-    // Personal history filter
-    const matchesPersonalHistory = !selectedFilters.personalHistory?.length || 
-      patient.PatientPersonalHistory?.some(history => 
-        selectedFilters.personalHistory.includes(history.attribute.toLowerCase().replace(/\s+/g, '_'))
-      );
-
-    if (!matchesPersonalHistory) return false;
-
-    // Family history filter
-    const matchesFamilyHistory = !selectedFilters.familyHistory?.length || 
-      patient.PatientFamilyHistory?.some(history => 
-        selectedFilters.familyHistory.includes(history.attribute.toLowerCase().replace(/\s+/g, '_'))
-      );
-
-    if (!matchesFamilyHistory) return false;
-
-    // Medical history filter
-    const matchesMedicalHistory = !selectedFilters.medicalHistory?.length || 
-      patient.PatientMedicalHistory?.some(history => 
-        selectedFilters.medicalHistory.includes(history.attribute.toLowerCase().replace(/\s+/g, '_'))
-      );
-
-    if (!matchesMedicalHistory) return false;
-
-    // Surgical history filter
-    const matchesSurgicalHistory = !selectedFilters.surgicalHistory?.length || 
-      patient.PatientSurgicalHistory?.some(history => 
-        selectedFilters.surgicalHistory.includes(history.attribute.toLowerCase().replace(/\s+/g, '_'))
-      );
-
-    if (!matchesSurgicalHistory) return false;
-
-    // Drug history filter
-    const matchesDrugHistory = !selectedFilters.drugHistory?.length || 
-      patient.PatientDrugHistory?.some(history => 
-        selectedFilters.drugHistory.includes(history.attribute.toLowerCase().replace(/\s+/g, '_'))
-      );
-
-    if (!matchesDrugHistory) return false;
-
-    // Examinations filter
-    const matchesExaminations = !selectedFilters.examinations?.length || 
-      patient.PatientExamFinding?.some(finding => 
-        selectedFilters.examinations.includes(finding.attribute.toLowerCase().replace(/\s+/g, '_'))
-      );
-
-    if (!matchesExaminations) return false;
-
-    // Diagnosis filter
-    const matchesDiagnosis = !selectedFilters.diagnosis?.length || 
-      patient.PatientDiagnosis?.some(diagnosis => 
-        selectedFilters.diagnosis.includes(diagnosis.attribute.toLowerCase().replace(/\s+/g, '_'))
-      );
-
-    if (!matchesDiagnosis) return false;
-
-    // If all filters pass, include the patient
-    return true;
-  });
-}
+      if (!matchesSearch) return false;
+  
+      // Gender filter
+      const matchesGender = !selectedFilters.gender?.length || 
+        selectedFilters.gender.includes(patient.gender.toLowerCase());
+  
+      if (!matchesGender) return false;
+  
+      // Complaints filter
+      const matchesComplaints = !selectedFilters.complaints?.length || 
+        patient.Prescription?.some(prescription => 
+          prescription.PrescriptionComplaint?.some(complaint => 
+            selectedFilters.complaints.includes(complaint.complaint.toLowerCase().replace(/\s+/g, '_'))
+          )
+        );
+  
+      if (!matchesComplaints) return false;
+  
+      // Personal history filter
+      const matchesPersonalHistory = !selectedFilters.personalHistory?.length || 
+        patient.PatientPersonalHistory?.some(history => 
+          selectedFilters.personalHistory.includes(history.attribute.toLowerCase().replace(/\s+/g, '_'))
+        );
+  
+      if (!matchesPersonalHistory) return false;
+  
+      // Family history filter
+      const matchesFamilyHistory = !selectedFilters.familyHistory?.length || 
+        patient.PatientFamilyHistory?.some(history => 
+          selectedFilters.familyHistory.includes(history.attribute.toLowerCase().replace(/\s+/g, '_'))
+        );
+  
+      if (!matchesFamilyHistory) return false;
+  
+      // Medical history filter
+      const matchesMedicalHistory = !selectedFilters.medicalHistory?.length || 
+        patient.PatientMedicalHistory?.some(history => 
+          selectedFilters.medicalHistory.includes(history.attribute.toLowerCase().replace(/\s+/g, '_'))
+        );
+  
+      if (!matchesMedicalHistory) return false;
+  
+      // Surgical history filter
+      const matchesSurgicalHistory = !selectedFilters.surgicalHistory?.length || 
+        patient.PatientSurgicalHistory?.some(history => 
+          selectedFilters.surgicalHistory.includes(history.attribute.toLowerCase().replace(/\s+/g, '_'))
+        );
+  
+      if (!matchesSurgicalHistory) return false;
+  
+      // Drug history filter
+      const matchesDrugHistory = !selectedFilters.drugHistory?.length || 
+        patient.PatientDrugHistory?.some(history => 
+          selectedFilters.drugHistory.includes(history.attribute.toLowerCase().replace(/\s+/g, '_'))
+        );
+  
+      if (!matchesDrugHistory) return false;
+  
+      // Examinations filter
+      const matchesExaminations = !selectedFilters.examinations?.length || 
+        patient.PatientExamFinding?.some(finding => 
+          selectedFilters.examinations.includes(finding.attribute.toLowerCase().replace(/\s+/g, '_'))
+        );
+  
+      if (!matchesExaminations) return false;
+  
+      // Diagnosis filter
+      const matchesDiagnosis = !selectedFilters.diagnosis?.length || 
+        patient.PatientDiagnosis?.some(diagnosis => 
+          selectedFilters.diagnosis.includes(diagnosis.attribute.toLowerCase().replace(/\s+/g, '_'))
+        );
+  
+      if (!matchesDiagnosis) return false;
+  
+      // If all filters pass, include the patient
+      return true;
+    });
+  }
+  
