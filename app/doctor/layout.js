@@ -37,14 +37,16 @@ const DoctorLayout = ({ children }) => {
         </header>
 
         {/* Page Content */}
-        <main
-          className={`flex-1 p-6 pt-20 bg-gray-100 transition-all duration-400`}
-          style={{
-            marginLeft: isOpen || isHovered ? "200px" : "50px",
-          }}
-        >
-          {isLoading ? <Loading /> : children}
-        </main>
+        <SessionProvider>
+          <main
+            className={`flex-1 p-6 pt-20 bg-gray-100 transition-all duration-400`}
+            style={{
+              marginLeft: isOpen || isHovered ? "200px" : "50px",
+            }}
+          >
+            {isLoading ? <Loading /> : children}
+          </main>
+        </SessionProvider>
       </div>
     </div>
   );
