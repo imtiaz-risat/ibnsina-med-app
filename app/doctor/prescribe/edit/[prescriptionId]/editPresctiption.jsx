@@ -6,6 +6,7 @@ import TreatmentBox from "../../treatmentBox";
 import toast, { Toaster } from "react-hot-toast";
 import { pdf } from "@react-pdf/renderer";
 import PrescriptionPDF from "../../../../components/prescriptionPDF";
+import { useSession } from "next-auth/react";
 
 // Sample suggestions for each section
 const complaintSuggestions = [
@@ -48,6 +49,7 @@ export default function EditPrescription({
   prescriptionData,
   presetData,
 }) {
+  const { data: session } = useSession();
   //   console.log("patientData in newPrescription:" + patientData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -95,7 +97,7 @@ export default function EditPrescription({
       // Collecting All data for Prescription
       const prescriptionData = {
         patientId: patientData.id,
-        doctorId: 1, // Replace with actual auth ID
+        doctorId: session?.user?.id,
         complaints: formData.complaints,
         treatments: formData.treatments,
         advice: formData.advice,
@@ -148,7 +150,7 @@ export default function EditPrescription({
             gender: patientData.gender,
             maritalStatus: patientData.maritalStatus,
             prescriptionDateCreated: prescriptionData.dateCreated,
-            doctorName: "Dr. Example Name", // Replace with actual doctor name
+            doctorName: `${session?.user?.firstname} ${session?.user?.lastname}`,
             complaints: formData.complaints,
             treatments: formData.treatments,
             advice: formData.advice,

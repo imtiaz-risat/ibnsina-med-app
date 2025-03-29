@@ -7,6 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { pdf } from "@react-pdf/renderer";
 import PrescriptionPDF from "../../../components/prescriptionPDF";
+import { useSession } from "next-auth/react";
 
 // Sample suggestions for each section
 const complaintSuggestions = [
@@ -48,6 +49,7 @@ export default function NewPrescription({
   presetData,
 }) {
   const router = useRouter();
+  const { data: session } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     // prescription data
@@ -94,7 +96,7 @@ export default function NewPrescription({
       // Collecting All data for Prescription
       const prescriptionData = {
         patientId: patientData.id,
-        doctorId: 1, // Replace with actual auth ID
+        doctorId: session?.user?.id,
         complaints: formData.complaints,
         treatments: formData.treatments,
         advice: formData.advice,
@@ -152,7 +154,7 @@ export default function NewPrescription({
             gender: patientData.gender,
             maritalStatus: patientData.maritalStatus,
             prescriptionDateCreated: new Date().toISOString(),
-            doctorName: "Dr. Example Name", // Replace with actual doctor name
+            doctorName: `${session?.user?.firstname} ${session?.user?.lastname}`,
             complaints: formData.complaints,
             treatments: formData.treatments,
             advice: formData.advice,
