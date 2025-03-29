@@ -29,11 +29,17 @@ export default function PatientList() {
         setIsLoading(true);
         
         // Fetch presets
-        const presetsRes = await fetch("/api/presets");
-        if (!presetsRes.ok) {
-          throw new Error("Failed to fetch presets");
+        let presetsData = null;
+        try {
+          const presetsRes = await fetch("/api/presets");
+          if (presetsRes.ok) {
+            presetsData = await presetsRes.json();
+          } else {
+            console.warn("Could not fetch presets, using default filters");
+          }
+        } catch (presetsError) {
+          console.warn("Error fetching presets, using default filters:", presetsError);
         }
-        const presetsData = await presetsRes.json();
         
         // Fetch patients with prescriptions
         const patientsRes = await fetch("/api/patients/withPrescriptions");

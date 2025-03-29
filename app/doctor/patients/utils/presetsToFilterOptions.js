@@ -6,6 +6,20 @@
 export function presetsToFilterOptions(presets) {
   // Initialize the filter options object
   const filterOptions = {};
+  
+  // If presets is null or undefined, return only gender filter
+  if (!presets) {
+    return {
+      gender: {
+        title: "Gender",
+        options: [
+          { id: "male", label: "Male", count: 0 },
+          { id: "female", label: "Female", count: 0 },
+          { id: "other", label: "Other", count: 0 },
+        ],
+      }
+    };
+  }
 
   // Map complaints
   if (presets.complaintPresets?.length > 0) {
