@@ -34,7 +34,7 @@ export default function PatientList() {
         const data = await res.json();
         setPatients(data);
         setIsLoading(false);
-        //console.log(data);
+        ////console.log(data);
       } catch (err) {
         setError(err);
         setIsLoading(false);

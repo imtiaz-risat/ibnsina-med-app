@@ -5,12 +5,12 @@ const prisma = new PrismaClient();
 export async function GET() {
   try {
     await prisma.$connect();
-    console.log("Database connected successfully");
+    //console.log("Database connected successfully");
 
     //const patientData = await req.json();
     
     const patients = await prisma.patient.findMany();
-    console.log(patients);
+    //console.log(patients);
 
     return new Response(JSON.stringify(patients), {
       status: 200,

@@ -156,7 +156,7 @@ export default function PrescriptionsTable({ prescriptions }) {
         nextVisitDate: prescriptionData.nextVisit || "",
       };
 
-      console.log("Formatted data for PDF:", formattedData);
+      //console.log("Formatted data for PDF:", formattedData);
 
       // Generate the PDF
       const pdfBlob = await pdf(

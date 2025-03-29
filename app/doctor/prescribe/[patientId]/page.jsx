@@ -8,7 +8,7 @@ async function getPatientData(patientId) {
     );
     if (!res.ok) throw new Error("Failed to fetch patient");
     const data = await res.json();
-    console.log(data);
+    //console.log(data);
     return data;
   } catch (error) {
     console.error("Patient fetch error:", error);
@@ -21,7 +21,7 @@ async function getPresetData() {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/presets`);
     if (!res.ok) throw new Error("Failed to fetch presets");
     const data = await res.json();
-    console.log(data);
+    //console.log(data);
     return data;
   } catch (error) {
     console.error("Presets fetch error:", error);

@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
 });
 
 const PrescriptionPDF = ({ prescription }) => {
-  console.log("prescription pdf data:" + JSON.stringify(prescription));
+  //console.log("prescription pdf data:" + JSON.stringify(prescription));
 
   return (
     <Document>

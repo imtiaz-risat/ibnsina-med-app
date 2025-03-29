@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 export async function POST(req) {
   try {
     await prisma.$connect();
-    console.log("Database connected successfully");
+   // //console.log("Database connected successfully");
 
     const patientData = await req.json();
 

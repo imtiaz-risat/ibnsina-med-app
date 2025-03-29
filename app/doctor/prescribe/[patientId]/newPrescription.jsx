@@ -71,7 +71,7 @@ export default function NewPrescription({
     investigation: patientData.PatientInvestigation || [],
   });
 
-  console.log("formData:" + JSON.stringify(formData));
+  //console.log("formData:" + JSON.stringify(formData));
 
   // Unified update function
   // Memoize the update function
@@ -91,7 +91,7 @@ export default function NewPrescription({
     e.preventDefault();
     setIsSubmitting(true);
 
-    console.log("Attempting to save...");
+    //console.log("Attempting to save...");
     try {
       // Collecting All data for Prescription
       const prescriptionData = {

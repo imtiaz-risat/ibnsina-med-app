@@ -78,7 +78,7 @@ export default function PrescriptionForm({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log("Attempting to save...");
+    //console.log("Attempting to save...");
     try {
       const url = isEditMode
         ? `${process.env.NEXT_PUBLIC_API_URL}/api/prescription/${prescriptionId}`

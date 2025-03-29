@@ -50,7 +50,7 @@ export default function EditPrescription({
   presetData,
 }) {
   const { data: session } = useSession();
-  //   console.log("patientData in newPrescription:" + patientData);
+  //   //console.log("patientData in newPrescription:" + patientData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     // prescription data
@@ -72,7 +72,7 @@ export default function EditPrescription({
     investigation: patientData.PatientInvestigation || [],
   });
 
-  console.log("formData:" + JSON.stringify(formData));
+  //console.log("formData:" + JSON.stringify(formData));
 
   // Unified update function
   // Memoize the update function
@@ -92,7 +92,7 @@ export default function EditPrescription({
     e.preventDefault();
     setIsSubmitting(true);
 
-    console.log("Attempting to update...");
+    //console.log("Attempting to update...");
     try {
       // Collecting All data for Prescription
       const prescriptionData = {

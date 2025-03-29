@@ -36,11 +36,11 @@ export async function GET() {
 // Create Prescription
 export async function POST(request) {
   try {
-    console.log("Creating prescription...");
+    //console.log("Creating prescription...");
 
     // Parse request body
     const body = await request.json();
-    // console.log("Request Body:", body);
+    // //console.log("Request Body:", body);
 
     const {
       patientId,
@@ -188,11 +188,11 @@ export async function POST(request) {
 // UPDATE Prescription
 export async function PUT(request) {
   try {
-    console.log("Updating prescription...");
+    //console.log("Updating prescription...");
 
     // Parse request body
     const body = await request.json();
-    console.log("Request Body:", body);
+    //console.log("Request Body:", body);
 
     const {
       patientId,

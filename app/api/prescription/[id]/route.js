@@ -38,11 +38,11 @@ export async function GET(request, { params }) {
 // PUT Update Prescription
 export async function PUT(request, { params }) {
   try {
-    console.log("Updating prescription...");
+    //console.log("Updating prescription...");
 
     // Parse request body
     const body = await request.json();
-    console.log("Request Body:", body);
+    //console.log("Request Body:", body);
 
     const {
       patientId,

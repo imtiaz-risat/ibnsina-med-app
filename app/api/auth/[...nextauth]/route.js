@@ -58,8 +58,8 @@ const authOptions = {
         token.lastname = user.lastname;
         token.id = user.id;
       }
-      // console.log("Callback token:", token);
-      // console.log("Callback user:", user);
+      // //console.log("Callback token:", token);
+      // //console.log("Callback user:", user);
       return token;
     },
     async session({ session, token }) {
