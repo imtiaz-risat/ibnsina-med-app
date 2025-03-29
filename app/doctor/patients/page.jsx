@@ -8,7 +8,7 @@ import { Filter } from "lucide-react";
 import { SearchBox } from "./searchBox";
 import { Pagination } from "./pagination";
 import { FilterSidebar } from "./filterSidebar";
-import { filterOptions } from "./mockFilterOptions";
+import { presetsToFilterOptions, updateFilterOptionsCounts, filterPatients } from "./utils/presetsToFilterOptions";
 
 export default function PatientList() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,30 +18,47 @@ export default function PatientList() {
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
 
   const [patients, setPatients] = useState([]);
+  const [filterOptions, setFilterOptions] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fetch presets and patients with prescriptions
   useEffect(() => {
-    async function fetchPatients() {
+    async function fetchData() {
       try {
         setIsLoading(true);
-        const res = await fetch("/api/doctor/getPatient");
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch patients");
+        
+        // Fetch presets
+        const presetsRes = await fetch("/api/presets");
+        if (!presetsRes.ok) {
+          throw new Error("Failed to fetch presets");
         }
-
-        const data = await res.json();
-        setPatients(data);
+        const presetsData = await presetsRes.json();
+        
+        // Fetch patients with prescriptions
+        const patientsRes = await fetch("/api/patients/withPrescriptions");
+        if (!patientsRes.ok) {
+          throw new Error("Failed to fetch patients with prescriptions");
+        }
+        const patientsData = await patientsRes.json();
+        
+        // Convert presets to filter options format
+        const initialFilterOptions = presetsToFilterOptions(presetsData);
+        
+        // Update filter options with counts based on patient data
+        const updatedFilterOptions = updateFilterOptionsCounts(initialFilterOptions, patientsData);
+        
+        setFilterOptions(updatedFilterOptions);
+        setPatients(patientsData);
         setIsLoading(false);
-        ////console.log(data);
       } catch (err) {
+        console.error("Error fetching data:", err);
         setError(err);
         setIsLoading(false);
       }
     }
 
-    fetchPatients();
+    fetchData();
   }, []); // Empty dependency array means this runs once on component mount
 
   if (isLoading) {
@@ -60,19 +77,8 @@ export default function PatientList() {
     setCurrentPage(1);
   };
 
-  // Filter and sort patients
-  const filteredPatients = patients.filter((patient) => {
-    const matchesSearch =
-      patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      patient.id.toLowerCase().includes(searchQuery.toLowerCase());
-
-    // Add more complex filtering logic here based on selectedFilters
-    const matchesGender =
-      !selectedFilters.gender?.length ||
-      selectedFilters.gender.includes(patient.gender.toLowerCase());
-
-    return matchesSearch && matchesGender;
-  });
+  // Filter patients using the utility function
+  const filteredPatients = filterPatients(patients, selectedFilters, searchQuery);
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredPatients.length / perPage);
