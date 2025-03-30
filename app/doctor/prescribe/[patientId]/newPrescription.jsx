@@ -50,7 +50,8 @@ export default function NewPrescription({
   }, []);
 
   const handleViewProfile = () => {
-    // Add your logic here to handle the view profile button click
+    // Navigate to the patient's profile page
+    router.push(`/doctor/patients/${patientId}`);
   };
 
   const handleSubmit = async (e) => {

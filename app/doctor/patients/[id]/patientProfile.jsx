@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SlUser, SlUserFemale } from "react-icons/sl";
-import { FiEdit, FiPrinter, FiTrash2 } from "react-icons/fi";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { toast, Toaster } from "react-hot-toast";
 import EditPatientForm from "./editPatientForm";
 
@@ -42,22 +42,6 @@ export default function PatientProfile({ initialData, prescriptions }) {
   const handleUpdatePatient = (updatedPatient) => {
     setPatient(updatedPatient);
     toast.success("Patient profile updated successfully");
-  };
-
-  const handlePrint = (prescriptionId) => {
-    // Open the prescription in print view
-    const printWindow = window.open(
-      `/doctor/prescribe/print/${prescriptionId}`,
-      "_blank"
-    );
-    if (printWindow) {
-      // If the new window was successfully opened, trigger print when it loads
-      printWindow.addEventListener("load", () => {
-        printWindow.print();
-      });
-    } else {
-      toast.error("Please allow pop-ups to print prescriptions");
-    }
   };
 
   // console.log(allPrescriptions);
@@ -173,13 +157,6 @@ export default function PatientProfile({ initialData, prescriptions }) {
                             Edit
                             <FiEdit />
                           </Link>
-                          <button
-                            onClick={() => handlePrint(prescription.id)}
-                            className="flex items-center gap-1 px-2 py-1 text-xs text-gray-600 border border-gray-200 rounded-md hover:bg-gray-50"
-                          >
-                            Print
-                            <FiPrinter />
-                          </button>
                           <button
                             onClick={() => handleDelete(prescription.id)}
                             className="flex items-center gap-1 px-2 py-1 text-xs text-red-600 border border-gray-200 rounded-md hover:bg-red-50"
