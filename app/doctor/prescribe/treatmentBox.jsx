@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FiCheck } from "react-icons/fi";
 
 // Default suggestions for treatment
@@ -79,6 +79,42 @@ function TreatmentInput({ onAdd, suggestions }) {
     duration: false,
   });
 
+  // Add refs for each suggestion dropdown
+  const suggestionRefs = {
+    drugName: useRef(null),
+    dose: useRef(null),
+    rule: useRef(null),
+    duration: useRef(null),
+  };
+
+  // Handle outside clicks for all suggestion dropdowns
+  useEffect(() => {
+    function handleClickOutside(event) {
+      const newState = { ...showSuggestions };
+      let changed = false;
+
+      Object.keys(suggestionRefs).forEach((field) => {
+        if (
+          showSuggestions[field] &&
+          suggestionRefs[field].current &&
+          !suggestionRefs[field].current.contains(event.target)
+        ) {
+          newState[field] = false;
+          changed = true;
+        }
+      });
+
+      if (changed) {
+        setShowSuggestions(newState);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showSuggestions]);
+
   const handleAdd = () => {
     if (drugName.trim() && dose.trim() && rule.trim() && duration.trim()) {
       onAdd({
@@ -106,7 +142,10 @@ function TreatmentInput({ onAdd, suggestions }) {
       return null;
 
     return (
-      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-blue-200 rounded-md shadow-lg max-h-32 overflow-y-auto z-10">
+      <div
+        ref={suggestionRefs[field]}
+        className="absolute top-full left-0 right-0 mt-1 bg-white border border-blue-200 rounded-md shadow-lg max-h-32 overflow-y-auto z-10"
+      >
         {filteredSuggestions.map((suggestion) => (
           <button
             key={suggestion}
@@ -134,13 +173,6 @@ function TreatmentInput({ onAdd, suggestions }) {
             onFocus={() =>
               setShowSuggestions((prev) => ({ ...prev, drugName: true }))
             }
-            onBlur={() =>
-              setTimeout(
-                () =>
-                  setShowSuggestions((prev) => ({ ...prev, drugName: false })),
-                200
-              )
-            }
             placeholder="Drug name"
             className="w-full px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
           />
@@ -153,12 +185,6 @@ function TreatmentInput({ onAdd, suggestions }) {
             onChange={(e) => setDose(e.target.value)}
             onFocus={() =>
               setShowSuggestions((prev) => ({ ...prev, dose: true }))
-            }
-            onBlur={() =>
-              setTimeout(
-                () => setShowSuggestions((prev) => ({ ...prev, dose: false })),
-                200
-              )
             }
             placeholder="Dose"
             className="w-full px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
@@ -173,12 +199,6 @@ function TreatmentInput({ onAdd, suggestions }) {
             onFocus={() =>
               setShowSuggestions((prev) => ({ ...prev, rule: true }))
             }
-            onBlur={() =>
-              setTimeout(
-                () => setShowSuggestions((prev) => ({ ...prev, rule: false })),
-                200
-              )
-            }
             placeholder="Rule"
             className="w-full px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
           />
@@ -191,13 +211,6 @@ function TreatmentInput({ onAdd, suggestions }) {
             onChange={(e) => setDuration(e.target.value)}
             onFocus={() =>
               setShowSuggestions((prev) => ({ ...prev, duration: true }))
-            }
-            onBlur={() =>
-              setTimeout(
-                () =>
-                  setShowSuggestions((prev) => ({ ...prev, duration: false })),
-                200
-              )
             }
             placeholder="Duration"
             className="w-full px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"

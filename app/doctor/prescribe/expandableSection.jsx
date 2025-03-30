@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 function SectionHeader({ title, onToggle, isExpanded, itemCount }) {
   return (
@@ -25,6 +25,7 @@ function TopicInput({ suggestions, onAdd }) {
   const [topic, setTopic] = useState("");
   const [value, setValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const suggestionsRef = useRef(null);
 
   const handleAdd = () => {
     if (topic.trim()) {
@@ -33,6 +34,22 @@ function TopicInput({ suggestions, onAdd }) {
       setValue("");
     }
   };
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target)
+      ) {
+        setShowSuggestions(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const filteredSuggestions = topic
     ? suggestions.filter((s) => s.toLowerCase().includes(topic.toLowerCase()))
@@ -46,12 +63,14 @@ function TopicInput({ suggestions, onAdd }) {
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
           onFocus={() => setShowSuggestions(true)}
-          onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           placeholder="Enter attribute"
           className="w-full px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-black outline-none"
         />
         {showSuggestions && (
-          <div className="absolute w-fit top-full left-0 right-0 mt-1 bg-white border border-blue-200 rounded-md shadow-lg max-h-32 overflow-y-auto z-10">
+          <div
+            ref={suggestionsRef}
+            className="absolute w-fit top-full left-0 right-0 mt-1 bg-white border border-blue-200 rounded-md shadow-lg max-h-32 overflow-y-auto z-10"
+          >
             {filteredSuggestions.map((suggestion) => (
               <button
                 key={suggestion}
