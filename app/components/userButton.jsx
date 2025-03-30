@@ -50,13 +50,6 @@ const UserButton = () => {
             </div>
             <div className="border-t border-gray-200">
               <button
-                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-                href="/doctor/profile"
-              >
-                <LuSettings className="mr-2" />
-                Manage account
-              </button>
-              <button
                 onClick={() => signOut()}
                 className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
               >
