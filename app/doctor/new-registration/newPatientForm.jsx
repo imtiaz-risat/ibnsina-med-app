@@ -56,211 +56,188 @@ const NewPatientForm = ({ onSubmit }) => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="grid gap-8 sm:gap-8">
-          {/* Name and Date of Birth */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="relative">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="mb-4">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Name <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
-                name="name"
                 id="name"
+                name="name"
                 value={formData.name}
                 onChange={handleChange}
                 required
-                disabled={isSubmitting}
-                className="peer w-full border px-2 border-gray-300 placeholder-transparent   transition-colors bg-transparent py-2.5"
-                placeholder="Patient Name"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <label
-                htmlFor="name"
-                className="absolute left-3 -top-3 text-sm text-gray-600 bg-white px-2 peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 transition-all peer-focus:-top-3 peer-focus:text-sm peer-focus:text-gray-600"
-              >
-                Patient Name
-              </label>
             </div>
 
-            <div className="relative">
+            <div className="mb-4">
+              <label
+                htmlFor="dateOfBirth"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Date of Birth <span className="text-red-500">*</span>
+              </label>
               <input
                 type="date"
-                name="dateOfBirth"
                 id="dateOfBirth"
+                name="dateOfBirth"
                 value={formData.dateOfBirth}
                 onChange={handleChange}
                 required
-                disabled={isSubmitting}
-                className="peer w-full border px-2 border-gray-300 placeholder-transparent   transition-colors bg-transparent py-2.5"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <label
-                htmlFor="dateOfBirth"
-                className="absolute left-3 -top-3 text-sm text-gray-600 bg-white px-2 peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 transition-all peer-focus:-top-3 peer-focus:text-sm peer-focus:text-gray-600"
-              >
-                Date of Birth
-              </label>
             </div>
           </div>
 
-          {/* Gender and Marital Status */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="relative">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="mb-4">
+              <label
+                htmlFor="gender"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Gender <span className="text-red-500">*</span>
+              </label>
               <select
-                name="gender"
                 id="gender"
+                name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                disabled={isSubmitting}
-                className="w-full border border-gray-300 px-2   transition-colors bg-transparent py-2.5 appearance-none cursor-pointer"
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </select>
-              <label
-                htmlFor="gender"
-                className="absolute left-3 -top-3 text-sm text-gray-600 bg-white px-2 peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 transition-all peer-focus:-top-3 peer-focus:text-sm peer-focus:text-gray-600"
-              >
-                Gender
-              </label>
             </div>
 
-            <div className="relative">
+            <div className="mb-4">
+              <label
+                htmlFor="maritalStatus"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Marital Status <span className="text-red-500">*</span>
+              </label>
               <select
-                name="maritalStatus"
                 id="maritalStatus"
+                name="maritalStatus"
                 value={formData.maritalStatus}
                 onChange={handleChange}
-                disabled={isSubmitting}
-                className="w-full border border-gray-300 px-2   transition-colors bg-transparent py-2.5 appearance-none cursor-pointer"
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="Single">Single</option>
                 <option value="Married">Married</option>
                 <option value="Divorced">Divorced</option>
                 <option value="Widowed">Widowed</option>
               </select>
-              <label
-                htmlFor="maritalStatus"
-                className="absolute left-3 -top-3 text-sm text-gray-600 bg-white px-2 peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 transition-all peer-focus:-top-3 peer-focus:text-sm peer-focus:text-gray-600"
-              >
-                Marital Status
-              </label>
             </div>
           </div>
 
-          {/* District and Occupation */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="relative">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="mb-4">
+              <label
+                htmlFor="district"
+                className="block text-sm font-medium text-gray-700"
+              >
+                District <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
-                name="district"
                 id="district"
+                name="district"
                 value={formData.district}
                 onChange={handleChange}
                 required
-                disabled={isSubmitting}
-                className=" peer w-full border px-2 border-gray-300 placeholder-transparent transition-colors bg-transparent py-2.5"
-                placeholder="District"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <label
-                htmlFor="district"
-                className="absolute left-3 -top-3 text-sm text-gray-600 bg-white px-2 peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 transition-all peer-focus:-top-3 peer-focus:text-sm peer-focus:text-gray-600"
-              >
-                District
-              </label>
             </div>
 
-            <div className="relative">
+            <div className="mb-4">
+              <label
+                htmlFor="occupation"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Occupation <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
-                name="occupation"
                 id="occupation"
+                name="occupation"
                 value={formData.occupation}
                 onChange={handleChange}
                 required
-                disabled={isSubmitting}
-                className="peer w-full border px-2 border-gray-300 placeholder-transparent transition-colors bg-transparent py-2.5"
-                placeholder="Occupation"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <label
-                htmlFor="occupation"
-                className="absolute left-3 -top-3 text-sm text-gray-600 bg-white px-2 peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 transition-all peer-focus:-top-3 peer-focus:text-sm peer-focus:text-gray-600"
-              >
-                Occupation
-              </label>
             </div>
           </div>
 
-          {/* Reference By and Phone */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="relative">
-              <input
-                type="text"
-                name="refBy"
-                id="refBy"
-                value={formData.refBy}
-                onChange={handleChange}
-                disabled={isSubmitting}
-                className="peer w-full border px-2 border-gray-300 placeholder-transparent   transition-colors bg-transparent py-2.5"
-                placeholder="Referred By"
-              />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="mb-4">
               <label
                 htmlFor="refBy"
-                className="absolute left-3 -top-3 text-sm text-gray-600 bg-white px-2 peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 transition-all peer-focus:-top-3 peer-focus:text-sm peer-focus:text-gray-600"
+                className="block text-sm font-medium text-gray-700"
               >
                 Referred By
               </label>
+              <input
+                type="text"
+                id="refBy"
+                name="refBy"
+                value={formData.refBy}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
 
-            <div className="relative">
+            <div className="mb-4">
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Phone <span className="text-red-500">*</span>
+              </label>
               <input
                 type="tel"
-                name="phone"
                 id="phone"
+                name="phone"
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                disabled={isSubmitting}
-                className="peer w-full border px-2 border-gray-300 placeholder-transparent   transition-colors bg-transparent py-2.5"
-                placeholder="Phone Number"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <label
-                htmlFor="phone"
-                className="absolute left-3 -top-3 text-sm text-gray-600 bg-white px-2 peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 transition-all peer-focus:-top-3 peer-focus:text-sm peer-focus:text-gray-600"
-              >
-                Phone Number
-              </label>
             </div>
           </div>
 
-          {/* Note */}
-          <div className="relative">
-            <textarea
-              name="note"
-              id="note"
-              value={formData.note}
-              onChange={handleChange}
-              rows="4"
-              disabled={isSubmitting}
-              className="peer w-full border border-gray-300 placeholder-transparent   transition-colors bg-transparent p-4 resize-none"
-              placeholder="Additional Notes"
-            ></textarea>
+          <div className="mb-4">
             <label
               htmlFor="note"
-              className="absolute left-3 -top-3 text-sm text-gray-600 bg-white px-2 peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 transition-all peer-focus:-top-3 peer-focus:text-sm peer-focus:text-gray-600"
+              className="block text-sm font-medium text-gray-700"
             >
               Additional Notes
             </label>
+            <textarea
+              id="note"
+              name="note"
+              value={formData.note}
+              onChange={handleChange}
+              rows="4"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            ></textarea>
           </div>
 
-          <div className="flex justify-center pt-6">
+          <div className="flex justify-end mt-6">
             <button
               type="submit"
-              disabled={isSubmitting}
-              className={`w-full sm:w-auto px-8 py-3 bg-gray-900 text-white font-medium rounded-lg shadow-lg ${
-                isSubmitting
-                  ? "opacity-75 cursor-not-allowed"
-                  : "hover:bg-black"
-              }`}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-md transition duration-200"
             >
-              {isSubmitting ? "Registering..." : "Register Patient"}
+              Register Patient
             </button>
           </div>
         </form>

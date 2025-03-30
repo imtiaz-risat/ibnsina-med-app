@@ -28,7 +28,7 @@ const NewRegistrationPage = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="p-6 max-w-7xl mx-auto">
       <NewPatientForm onSubmit={addPatient} />
       <Toaster />
     </div>
