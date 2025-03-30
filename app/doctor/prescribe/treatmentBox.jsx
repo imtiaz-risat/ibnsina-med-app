@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { FiCheck } from "react-icons/fi";
+import {
+  ChevronDown,
+  ChevronUp,
+  Plus,
+  Edit2,
+  Trash2,
+  Save,
+  Check,
+} from "lucide-react";
 
 // Default suggestions for treatment
 const defaultSuggestions = {
@@ -52,16 +60,22 @@ function SectionHeader({
   return (
     <div
       onClick={onToggle}
-      className="flex items-center justify-between bg-blue-500 text-white p-2 rounded-t-md cursor-pointer group"
+      className="flex items-center justify-between bg-gradient-to-r from-blue-600 to-blue-500 text-white p-3 rounded-t-md cursor-pointer group shadow-sm"
     >
-      <h2 className="text-sm font-medium">
+      <h2 className="text-sm font-medium flex items-center">
         {title}
-        {itemCount > 0 && ` (${itemCount})`}
+        {itemCount > 0 && (
+          <span className="ml-2 bg-white bg-opacity-20 text-white text-xs px-2 py-0.5 rounded-full">
+            {itemCount}
+          </span>
+        )}
       </h2>
       <div className="flex items-center gap-1">
-        <span className="transition-transform duration-200 group-hover:scale-110">
-          {isExpanded ? "−" : "+"}
-        </span>
+        {isExpanded ? (
+          <ChevronUp className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
+        ) : (
+          <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
+        )}
       </div>
     </div>
   );
@@ -144,7 +158,7 @@ function TreatmentInput({ onAdd, suggestions }) {
     return (
       <div
         ref={suggestionRefs[field]}
-        className="absolute top-full left-0 right-0 mt-1 bg-white border border-blue-200 rounded-md shadow-lg max-h-32 overflow-y-auto z-10"
+        className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto z-20"
       >
         {filteredSuggestions.map((suggestion) => (
           <button
@@ -153,7 +167,7 @@ function TreatmentInput({ onAdd, suggestions }) {
               setValue(suggestion);
               setShowSuggestions((prev) => ({ ...prev, [field]: false }));
             }}
-            className="w-full px-2 py-1 text-sm text-left hover:bg-blue-50"
+            className="w-full px-3 py-2 text-sm text-left hover:bg-blue-50 border-b border-gray-100 last:border-b-0"
           >
             {suggestion}
           </button>
@@ -163,9 +177,12 @@ function TreatmentInput({ onAdd, suggestions }) {
   };
 
   return (
-    <div className="space-y-2 mb-2">
-      <div className="grid grid-cols-4 gap-2">
+    <div className="space-y-3 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
         <div className="relative">
+          <label className="block text-xs font-medium text-gray-600 mb-1 ml-1">
+            Drug Name
+          </label>
           <input
             type="text"
             value={drugName}
@@ -173,12 +190,15 @@ function TreatmentInput({ onAdd, suggestions }) {
             onFocus={() =>
               setShowSuggestions((prev) => ({ ...prev, drugName: true }))
             }
-            placeholder="Drug name"
-            className="w-full px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
+            placeholder="Medication name"
+            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none shadow-sm"
           />
           {renderSuggestionsList("drugName", drugName, setDrugName)}
         </div>
         <div className="relative">
+          <label className="block text-xs font-medium text-gray-600 mb-1 ml-1">
+            Dose
+          </label>
           <input
             type="text"
             value={dose}
@@ -186,12 +206,15 @@ function TreatmentInput({ onAdd, suggestions }) {
             onFocus={() =>
               setShowSuggestions((prev) => ({ ...prev, dose: true }))
             }
-            placeholder="Dose"
-            className="w-full px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
+            placeholder="e.g., 500mg"
+            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none shadow-sm"
           />
           {renderSuggestionsList("dose", dose, setDose)}
         </div>
         <div className="relative">
+          <label className="block text-xs font-medium text-gray-600 mb-1 ml-1">
+            Rule
+          </label>
           <input
             type="text"
             value={rule}
@@ -199,12 +222,15 @@ function TreatmentInput({ onAdd, suggestions }) {
             onFocus={() =>
               setShowSuggestions((prev) => ({ ...prev, rule: true }))
             }
-            placeholder="Rule"
-            className="w-full px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
+            placeholder="e.g., 1+0+1"
+            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none shadow-sm"
           />
           {renderSuggestionsList("rule", rule, setRule)}
         </div>
         <div className="relative">
+          <label className="block text-xs font-medium text-gray-600 mb-1 ml-1">
+            Duration
+          </label>
           <input
             type="text"
             value={duration}
@@ -212,8 +238,8 @@ function TreatmentInput({ onAdd, suggestions }) {
             onFocus={() =>
               setShowSuggestions((prev) => ({ ...prev, duration: true }))
             }
-            placeholder="Duration"
-            className="w-full px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
+            placeholder="e.g., 7 days"
+            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none shadow-sm"
           />
           {renderSuggestionsList("duration", duration, setDuration)}
         </div>
@@ -223,25 +249,42 @@ function TreatmentInput({ onAdd, suggestions }) {
         disabled={
           !drugName.trim() || !dose.trim() || !rule.trim() || !duration.trim()
         }
-        className="w-full px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-800 disabled:bg-blue-300 disabled:cursor-not-allowed"
+        className="w-full px-4 py-2.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition-colors duration-200 flex items-center justify-center gap-2 shadow-sm"
       >
-        Add Treatment
+        <Plus className="w-4 h-4" />
+        <span>Add Treatment</span>
       </button>
     </div>
   );
 }
 
 function TreatmentList({ items, onEdit, onDelete }) {
+  if (items.length === 0) {
+    return (
+      <div className="text-center py-6 text-gray-500 italic text-sm border border-dashed border-gray-200 rounded-md">
+        No treatments added yet
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-2">
-      {items.map((item, index) => (
-        <TreatmentItem
-          key={index}
-          item={item}
-          onEdit={(updatedItem) => onEdit(index, updatedItem)}
-          onDelete={() => onDelete(index)}
-        />
-      ))}
+    <div className="space-y-3">
+      <div className="grid grid-cols-4 gap-3 px-3 py-2 bg-gray-50 rounded-t-md text-xs font-medium text-gray-600 uppercase tracking-wider border border-gray-200">
+        <div>Drug Name</div>
+        <div>Dose</div>
+        <div>Rule</div>
+        <div>Duration</div>
+      </div>
+      <div className="space-y-2">
+        {items.map((item, index) => (
+          <TreatmentItem
+            key={index}
+            item={item}
+            onEdit={(updatedItem) => onEdit(index, updatedItem)}
+            onDelete={() => onDelete(index)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -264,44 +307,64 @@ function TreatmentItem({ item, onEdit, onDelete }) {
 
   if (isEditing) {
     return (
-      <div className="p-2 bg-blue-50 rounded-md space-y-2">
-        <div className="grid grid-cols-4 gap-2">
-          <input
-            type="text"
-            value={editedItem.drugName}
-            onChange={(e) =>
-              setEditedItem({ ...editedItem, drugName: e.target.value })
-            }
-            placeholder="Drug name"
-            className="px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
-          />
-          <input
-            type="text"
-            value={editedItem.dose}
-            onChange={(e) =>
-              setEditedItem({ ...editedItem, dose: e.target.value })
-            }
-            placeholder="Dose"
-            className="px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
-          />
-          <input
-            type="text"
-            value={editedItem.rule}
-            onChange={(e) =>
-              setEditedItem({ ...editedItem, rule: e.target.value })
-            }
-            placeholder="Rule"
-            className="px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
-          />
-          <input
-            type="text"
-            value={editedItem.duration}
-            onChange={(e) =>
-              setEditedItem({ ...editedItem, duration: e.target.value })
-            }
-            placeholder="Duration"
-            className="px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
-          />
+      <div className="p-3 bg-blue-50 rounded-md space-y-3 border border-blue-100 shadow-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">
+              Drug Name
+            </label>
+            <input
+              type="text"
+              value={editedItem.drugName}
+              onChange={(e) =>
+                setEditedItem({ ...editedItem, drugName: e.target.value })
+              }
+              placeholder="Drug name"
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">
+              Dose
+            </label>
+            <input
+              type="text"
+              value={editedItem.dose}
+              onChange={(e) =>
+                setEditedItem({ ...editedItem, dose: e.target.value })
+              }
+              placeholder="Dose"
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">
+              Rule
+            </label>
+            <input
+              type="text"
+              value={editedItem.rule}
+              onChange={(e) =>
+                setEditedItem({ ...editedItem, rule: e.target.value })
+              }
+              placeholder="Rule"
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">
+              Duration
+            </label>
+            <input
+              type="text"
+              value={editedItem.duration}
+              onChange={(e) =>
+                setEditedItem({ ...editedItem, duration: e.target.value })
+              }
+              placeholder="Duration"
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+            />
+          </div>
         </div>
         <div className="flex justify-end">
           <button
@@ -312,10 +375,10 @@ function TreatmentItem({ item, onEdit, onDelete }) {
               !editedItem.rule.trim() ||
               !editedItem.duration.trim()
             }
-            className="flex items-center gap-1 px-2 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-800 disabled:bg-blue-300 disabled:cursor-not-allowed"
+            className="flex items-center gap-1 px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition-colors"
           >
-            <FiCheck className="w-3.5 h-3.5" />
-            Save
+            <Check className="w-4 h-4" />
+            Save Changes
           </button>
         </div>
       </div>
@@ -323,25 +386,37 @@ function TreatmentItem({ item, onEdit, onDelete }) {
   }
 
   return (
-    <div className="flex items-center justify-between p-2 bg-blue-50 rounded-md group">
-      <div className="grid grid-cols-4 gap-2 flex-1">
-        <span className="text-sm">{item.drugName}</span>
-        <span className="text-sm">{item.dose}</span>
-        <span className="text-sm">{item.rule}</span>
-        <span className="text-sm">{item.duration}</span>
+    <div className="flex items-center justify-between p-3 bg-white rounded-md shadow-sm border border-gray-100 hover:border-gray-200 transition-colors group">
+      <div className="grid grid-cols-4 gap-3 flex-1">
+        <div>
+          <span className="text-sm font-medium text-gray-800">
+            {item.drugName}
+          </span>
+        </div>
+        <div>
+          <span className="text-sm text-gray-600">{item.dose}</span>
+        </div>
+        <div>
+          <span className="text-sm text-gray-600">{item.rule}</span>
+        </div>
+        <div>
+          <span className="text-sm text-gray-600">{item.duration}</span>
+        </div>
       </div>
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2 ml-4">
         <button
           onClick={() => setIsEditing(true)}
-          className="px-2 py-1 text-xs border border-blue-200 rounded-md hover:bg-blue-100 mr-1"
+          className="p-1.5 text-blue-600 rounded hover:bg-blue-50 transition-colors"
+          title="Edit treatment"
         >
-          Edit
+          <Edit2 className="w-4 h-4" />
         </button>
         <button
           onClick={onDelete}
-          className="px-2 py-1 text-xs text-red-600 border border-blue-200 rounded-md hover:bg-red-50"
+          className="p-1.5 text-red-600 rounded hover:bg-red-50 transition-colors"
+          title="Delete treatment"
         >
-          Delete
+          <Trash2 className="w-4 h-4" />
         </button>
       </div>
     </div>
@@ -384,14 +459,14 @@ function TreatmentBox({
   }, [items, onUpdate]);
 
   return (
-    <div className="border border-blue-200 rounded-md">
+    <div className="border border-gray-200 rounded-md shadow-sm mb-3">
       <SectionHeader
         onToggle={() => setIsExpanded(!isExpanded)}
         isExpanded={isExpanded}
         itemCount={items.length}
       />
       {isExpanded && (
-        <div className="p-2 border-t border-blue-200">
+        <div className="p-3 border-t border-gray-200 bg-white">
           <TreatmentInput onAdd={handleAdd} suggestions={suggestions} />
           <TreatmentList
             items={items}

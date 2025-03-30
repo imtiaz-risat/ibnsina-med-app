@@ -2,26 +2,30 @@
 
 import { useState, useRef, useEffect } from "react";
 import {
-  FiPaperclip,
-  FiX,
-  FiFile,
-  FiEdit2,
-  FiCheck,
-  FiDownload,
-  FiEye,
-} from "react-icons/fi";
+  Paperclip,
+  X,
+  FileText,
+  Edit2,
+  Check,
+  Download,
+  Eye,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 
 function SectionHeader({ title, onToggle, isExpanded }) {
   return (
     <div
       onClick={onToggle}
-      className="flex items-center justify-between bg-blue-500 text-white p-2 rounded-t-md cursor-pointer group"
+      className="flex items-center justify-between bg-gradient-to-r from-blue-600 to-blue-500 text-white p-3 rounded-t-md cursor-pointer group shadow-sm"
     >
-      <h2 className="text-sm font-medium">{title}</h2>
+      <h2 className="text-sm font-medium flex items-center">{title}</h2>
       <div className="flex items-center gap-1">
-        <span className="transition-transform duration-200 group-hover:scale-110">
-          {isExpanded ? "−" : "+"}
-        </span>
+        {isExpanded ? (
+          <ChevronUp className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
+        ) : (
+          <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
+        )}
       </div>
     </div>
   );
@@ -45,7 +49,7 @@ function FileUploader({ onFileSelect }) {
   };
 
   return (
-    <div className="flex items-center gap-2 mb-3">
+    <div className="flex items-center gap-2 mb-4">
       <input
         type="file"
         ref={fileInputRef}
@@ -55,17 +59,23 @@ function FileUploader({ onFileSelect }) {
       />
       <button
         onClick={() => fileInputRef.current?.click()}
-        className="flex w-full items-center justify-center gap-2 px-3 py-1 text-sm text-gray-900 bg-transparent border border-blue-400 hover:text-white rounded-md hover:bg-blue-500"
+        className="flex w-full items-center justify-center gap-2 px-4 py-2.5 text-sm bg-white border border-blue-300 text-blue-600 rounded-md hover:bg-blue-50 hover:border-blue-400 transition-colors shadow-sm"
       >
-        <FiPaperclip className="w-4 h-4" />
-        Attach Files
+        <Paperclip className="w-4 h-4" />
+        Select Files to Attach
       </button>
     </div>
   );
 }
 
 function FileList({ files, onRemove, onUpdateMetadata }) {
-  if (files.length === 0) return null;
+  if (files.length === 0) {
+    return (
+      <div className="text-center py-6 text-gray-500 italic text-sm border border-dashed border-gray-200 rounded-md">
+        No files attached
+      </div>
+    );
+  }
 
   const handleViewFile = (file) => {
     const url = URL.createObjectURL(file);
@@ -83,47 +93,62 @@ function FileList({ files, onRemove, onUpdateMetadata }) {
     URL.revokeObjectURL(url);
   };
 
+  const getFileIcon = (fileName) => {
+    const extension = fileName.split(".").pop().toLowerCase();
+
+    // You could expand this with more detailed icons based on extension
+    const isImage = ["jpg", "jpeg", "png", "gif", "webp", "svg"].includes(
+      extension
+    );
+    const isPdf = extension === "pdf";
+    const isDocument = ["doc", "docx", "txt", "rtf", "odt"].includes(extension);
+
+    return <FileText className="w-5 h-5 text-blue-500" />;
+  };
+
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {files.map((fileData, index) => (
         <div
           key={`${fileData.file.name}-${index}`}
-          className="p-3 bg-blue-50 rounded-md space-y-2"
+          className="p-4 bg-white rounded-md space-y-3 border border-gray-200 shadow-sm hover:border-blue-200 transition-colors"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <FiFile className="w-4 h-4 text-blue-500" />
-              <span className="text-sm text-blue-500">
-                Original: {fileData.file.name}(
-                {(fileData.file.size / 1024).toFixed(1)} KB)
+              {getFileIcon(fileData.file.name)}
+              <span className="text-sm text-blue-600 font-medium">
+                {fileData.file.name}
+                <span className="ml-2 text-xs text-gray-500">
+                  ({(fileData.file.size / 1024).toFixed(1)} KB)
+                </span>
               </span>
             </div>
             <div className="flex items-center gap-1">
               <button
                 onClick={() => handleViewFile(fileData.file)}
-                className="p-1.5 text-blue-400 hover:text-blue-500 rounded-full hover:bg-blue-200"
+                className="p-1.5 text-gray-500 hover:text-blue-600 rounded-full hover:bg-blue-50 transition-colors"
                 title="View file"
               >
-                <FiEye className="w-4 h-4" />
+                <Eye className="w-4 h-4" />
               </button>
               <button
                 onClick={() => handleDownloadFile(fileData.file, fileData.name)}
-                className="p-1.5 text-blue-400 hover:text-blue-500 rounded-full hover:bg-blue-200"
+                className="p-1.5 text-gray-500 hover:text-blue-600 rounded-full hover:bg-blue-50 transition-colors"
                 title="Download file"
               >
-                <FiDownload className="w-4 h-4" />
+                <Download className="w-4 h-4" />
               </button>
               <button
                 onClick={() => onRemove(index)}
-                className="p-1.5 text-blue-400 hover:text-red-500 rounded-full hover:bg-red-50"
+                className="p-1.5 text-gray-500 hover:text-red-600 rounded-full hover:bg-red-50 transition-colors"
                 title="Remove file"
               >
-                <FiX className="w-4 h-4" />
+                <X className="w-4 h-4" />
               </button>
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 pt-2 border-t border-gray-100">
             <div>
               {fileData.isEditing ? (
                 <input
@@ -133,16 +158,19 @@ function FileList({ files, onRemove, onUpdateMetadata }) {
                     onUpdateMetadata(index, { name: e.target.value })
                   }
                   placeholder="Enter file name"
-                  className="w-full px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none shadow-sm"
                 />
               ) : (
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">{fileData.name}</span>
+                  <span className="text-sm font-medium text-gray-800">
+                    {fileData.name}
+                  </span>
                   <button
                     onClick={() => onUpdateMetadata(index, { isEditing: true })}
-                    className="p-1 text-blue-400 hover:text-blue-500 rounded-full"
+                    className="p-1.5 text-gray-500 hover:text-blue-600 rounded-full hover:bg-blue-50 transition-colors"
+                    title="Edit file details"
                   >
-                    <FiEdit2 className="w-3.5 h-3.5" />
+                    <Edit2 className="w-4 h-4" />
                   </button>
                 </div>
               )}
@@ -158,23 +186,23 @@ function FileList({ files, onRemove, onUpdateMetadata }) {
                     }
                     placeholder="Enter file description"
                     rows={2}
-                    className="w-full px-2 py-1 text-sm border border-blue-200 rounded-md focus:border-blue-500 outline-none resize-none"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none shadow-sm resize-none"
                   />
                   <div className="flex justify-end">
                     <button
                       onClick={() =>
                         onUpdateMetadata(index, { isEditing: false })
                       }
-                      className="flex items-center gap-1 px-2 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-800"
+                      className="flex items-center gap-1 px-3 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                     >
-                      <FiCheck className="w-3.5 h-3.5" />
+                      <Check className="w-3.5 h-3.5" />
                       Save
                     </button>
                   </div>
                 </div>
               ) : (
-                <p className="text-sm text-blue-600">
-                  {fileData.description || "No description"}
+                <p className="text-sm text-gray-600 bg-gray-50 p-2 rounded-md">
+                  {fileData.description || "No description provided"}
                 </p>
               )}
             </div>
@@ -226,14 +254,14 @@ export default function AttachmentBox({
   };
 
   return (
-    <div className="border border-blue-200 rounded-md">
+    <div className="border border-gray-200 rounded-md shadow-sm mb-3">
       <SectionHeader
         title={`${title} (${files.length})`}
         onToggle={() => setIsExpanded(!isExpanded)}
         isExpanded={isExpanded}
       />
       {isExpanded && (
-        <div className="p-2 border-t border-blue-200">
+        <div className="p-3 border-t border-gray-200 bg-white">
           <FileUploader onFileSelect={handleFileSelect} />
           <FileList
             files={files}

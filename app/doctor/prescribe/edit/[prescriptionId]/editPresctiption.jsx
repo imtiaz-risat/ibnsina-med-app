@@ -7,6 +7,14 @@ import toast, { Toaster } from "react-hot-toast";
 import { pdf } from "@react-pdf/renderer";
 import PrescriptionPDF from "../../../../components/prescriptionPDF";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import {
+  UserCircle,
+  Calendar,
+  Printer,
+  Save,
+  ExternalLink,
+} from "lucide-react";
 
 export default function EditPrescription({
   patientId,
@@ -15,8 +23,8 @@ export default function EditPrescription({
   prescriptionData,
   presetData,
 }) {
+  const router = useRouter();
   const { data: session } = useSession();
-  //   //console.log("patientData in newPrescription:" + patientData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     // prescription data
@@ -38,8 +46,6 @@ export default function EditPrescription({
     investigation: patientData.PatientInvestigation || [],
   });
 
-  //console.log("formData:" + JSON.stringify(formData));
-
   // Unified update function
   // Memoize the update function
   const updateFormData = useCallback((section, data) => {
@@ -59,7 +65,6 @@ export default function EditPrescription({
     e.preventDefault();
     setIsSubmitting(true);
 
-    //console.log("Attempting to update...");
     try {
       // Collecting All data for Prescription
       const prescriptionData = {
@@ -93,11 +98,10 @@ export default function EditPrescription({
 
       if (!response.ok) throw new Error("Submission failed: " + response);
 
-      // const result = await response.json();
       toast.success("Prescription updated successfully!");
     } catch (error) {
       console.error("Submission error:", error);
-      // Add error state handling here
+      toast.error("Update failed: " + error);
     } finally {
       setIsSubmitting(false);
     }
@@ -110,7 +114,6 @@ export default function EditPrescription({
       const pdfBlob = await pdf(
         <PrescriptionPDF
           prescription={{
-            // ...formData,
             patientName: patientData.name,
             patientId: patientData.id,
             age: patientData.age,
@@ -138,7 +141,6 @@ export default function EditPrescription({
 
       const url = URL.createObjectURL(pdfBlob);
       const win = window.open(url);
-      // win.onload = () => win.print();
       URL.revokeObjectURL(url);
     } catch (error) {
       console.error("PDF generation failed:", error);
@@ -146,60 +148,90 @@ export default function EditPrescription({
     }
   };
 
+  // Format date for display
+  const formatPrescriptionDate = () => {
+    if (!prescriptionData.dateCreated) return "N/A";
+    return new Date(prescriptionData.dateCreated).toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
   return (
-    <div className="w-full bg-white rounded-2xl shadow-xl">
+    <div className="w-full bg-white rounded-xl shadow-lg">
       <Toaster position="top-right" />
-      <div className="p-4 sm:p-6 lg:p-8">
-        <div className="border border-blue-200 rounded-md py-2 px-4 mb-4">
-          <div className="flex flex-col-reverse sm:flex-row items-start justify-between mb-2">
-            <div className="flex flex-row items-center">
-              Patient ID{" "}
-              <input
-                type="text"
-                placeholder="Patient ID"
-                className="mt-1 ml-2 text-sm border-b border-gray-200 focus:border-gray-500 outline-none"
-                value={patientData.id}
-                onChange={(e) =>
-                  setPatientData({ ...patientData, id: e.target.value })
-                }
-              />
-            </div>
-            <p className="text-sm text-gray-600">Date: 03-Feb-2025</p>
-          </div>
-          <div className="flex flex-row items-baseline mb-2">
-            <div className="font-semibold mr-4 ">
-              Patient Name:{" "}
-              <span className="border-b border-gray-200">
-                {patientData.name}
+      <div className="p-5 sm:p-6 lg:p-8">
+        {/* Patient Info Header */}
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl px-6 py-4 mb-6 shadow-sm border border-blue-100">
+          <div className="flex flex-col-reverse sm:flex-row items-start sm:items-center justify-between mb-3 gap-2">
+            <div className="flex items-center gap-2">
+              <UserCircle className="w-5 h-5 text-blue-600" />
+              <span className="text-sm font-medium text-gray-500">ID:</span>
+              <span className="text-sm font-bold text-gray-800 bg-white px-2 py-0.5 rounded-md border border-gray-200">
+                {patientData.id}
               </span>
             </div>
-            <div className="flex flex-row items-center justify-stretch space-x-4">
-              <div className="flex flex-row items-center justify-between space-x-4">
-                <div className="text-sm text-gray-600 mr-4">
-                  Age:{" "}
-                  <span className="border-b border-gray-200">
-                    {patientData.age}
-                  </span>
+            <div className="flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-blue-600" />
+              <span className="text-sm font-medium text-gray-700">
+                {formatPrescriptionDate()}
+              </span>
+              <span className="text-xs text-white bg-blue-600 px-2 py-0.5 rounded-full">
+                Editing
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+            <div className="flex-1">
+              <div className="mb-2">
+                <span className="text-sm font-medium text-gray-500">
+                  Patient:
+                </span>
+                <span className="ml-2 text-lg font-semibold text-gray-900">
+                  {patientData.name}
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-4 text-sm">
+                <div className="flex items-center">
+                  <span className="font-medium text-gray-500">Age:</span>
+                  <span className="ml-1 text-gray-800">{patientData.age}</span>
                 </div>
-                <div className="text-sm text-gray-600 mr-4">
-                  Gender:{" "}
-                  <span className="border-b border-gray-200">
+                <div className="flex items-center">
+                  <span className="font-medium text-gray-500">Gender:</span>
+                  <span className="ml-1 text-gray-800">
                     {patientData.gender}
                   </span>
                 </div>
+                {patientData.maritalStatus && (
+                  <div className="flex items-center">
+                    <span className="font-medium text-gray-500">
+                      Marital Status:
+                    </span>
+                    <span className="ml-1 text-gray-800">
+                      {patientData.maritalStatus}
+                    </span>
+                  </div>
+                )}
               </div>
-              <button
-                className="bg-blue-500 text-white hover:bg-blue-600 text-sm px-2 py-1 rounded"
-                onClick={() => handleViewProfile()}
-              >
-                View Profile
-              </button>
             </div>
+            <button
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 bg-white border border-blue-200 rounded-md hover:bg-blue-50 transition-colors shadow-sm"
+              onClick={() => handleViewProfile()}
+            >
+              <ExternalLink className="w-4 h-4 mr-2" />
+              View Patient Profile
+            </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="col-span-1 h-[32rem] overflow-y-scroll">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Left Panel - Medical History */}
+          <div className="col-span-1 h-full overflow-y-auto bg-gray-50 p-3 rounded-lg shadow-sm">
+            <h3 className="text-sm font-semibold text-gray-700 mb-3 px-1">
+              Patient History & Data
+            </h3>
             <ExpandableSection
               title="Patient Complaints"
               initialItems={formData.complaints.map((item) => ({
@@ -301,78 +333,95 @@ export default function EditPrescription({
               onUpdate={(data) => updateFormData("investigation", data)}
             />
           </div>
-          <div className="col-span-1 md:col-span-2 space-y-2">
-            <TreatmentBox
-              initialItems={formData.treatments.map((item) => ({
-                drugName: item.drug,
-                dose: item.dose,
-                rule: item.rule,
-                duration: item.duration,
-              }))}
-              treatmentSuggestions={presetData?.treatmentPresets}
-              onUpdate={(treatments) =>
-                updateFormData("treatments", treatments)
-              }
-            />
-            <ExpandableSection
-              title="Advice"
-              initialItems={formData.advice.map((item) => ({
-                topic: item.advice,
-                value: item.value,
-              }))}
-              defaultExpanded={true}
-              suggestions={presetData?.advicePresets}
-              onUpdate={(data) => updateFormData("advice", data)}
-            />
-            <AttachmentBox
-              title="Attachments"
-              defaultExpanded={true}
-              onFilesChange={(attachments) =>
-                updateFormData("attachments", attachments)
-              }
-            />
-            <div className="mt-4 p-3 border border-blue-200 rounded-md">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-2">
+
+          {/* Right Panel - Prescription */}
+          <div className="col-span-1 md:col-span-2 space-y-3">
+            <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+              <h3 className="text-sm font-semibold text-gray-700 mb-3 px-1">
+                Prescription Details
+              </h3>
+
+              <TreatmentBox
+                initialItems={formData.treatments.map((item) => ({
+                  drugName: item.drug,
+                  dose: item.dose,
+                  rule: item.rule,
+                  duration: item.duration,
+                }))}
+                treatmentSuggestions={presetData?.treatmentPresets}
+                onUpdate={(treatments) =>
+                  updateFormData("treatments", treatments)
+                }
+              />
+              <ExpandableSection
+                title="Advice"
+                initialItems={formData.advice.map((item) => ({
+                  topic: item.advice,
+                  value: item.value,
+                }))}
+                defaultExpanded={true}
+                suggestions={presetData?.advicePresets}
+                onUpdate={(data) => updateFormData("advice", data)}
+              />
+              <AttachmentBox
+                title="Attachments"
+                defaultExpanded={true}
+                onFilesChange={(attachments) =>
+                  updateFormData("attachments", attachments)
+                }
+              />
+
+              <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="next-visit"
+                      checked={formData.hasNextVisit}
+                      onChange={(e) =>
+                        updateFormData("hasNextVisit", e.target.checked)
+                      }
+                      className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <label
+                      htmlFor="next-visit"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Schedule Next Visit / Follow Up
+                    </label>
+                  </div>
                   <input
-                    type="checkbox"
-                    checked={formData.hasNextVisit}
+                    type="date"
+                    value={formData.nextVisitDate}
                     onChange={(e) =>
-                      updateFormData("hasNextVisit", e.target.checked)
+                      updateFormData("nextVisitDate", e.target.value)
                     }
-                    className="h-4 w-4 text-black border-blue-300 rounded focus:ring-gray-500"
+                    disabled={!formData.hasNextVisit}
+                    min={new Date().toISOString().split("T")[0]}
+                    className="w-full sm:w-48 px-3 py-2 text-sm border border-gray-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none shadow-sm disabled:bg-gray-100 disabled:text-gray-500"
                   />
-                  <label className="text-sm font-medium text-gray-900">
-                    Next Visit Date/Follow Up
-                  </label>
                 </div>
-                <input
-                  type="date"
-                  value={formData.nextVisitDate}
-                  onChange={(e) =>
-                    updateFormData("nextVisitDate", e.target.value)
-                  }
-                  disabled={!formData.hasNextVisit}
-                  min={new Date().toISOString().split("T")[0]}
-                  className="w-48 px-2 py-1 text-sm border border-gray-200 rounded-md focus:border-black outline-none disabled:bg-gray-50 disabled:text-gray-500"
-                />
               </div>
             </div>
 
-            <div className="mt-2 flex flex-row gap-2">
+            <div className="flex flex-col sm:flex-row gap-3 mt-4">
               <button
-                className="w-full px-4 py-2 text-blue-500 transition-colors duration-200 border border-blue-500 rounded-md hover:bg-blue-500 hover:text-white"
+                className="flex-1 px-4 py-3 text-blue-600 transition-colors duration-200 bg-white border border-blue-300 rounded-lg hover:bg-blue-50 shadow-sm flex items-center justify-center gap-2"
                 onClick={handlePrint}
               >
-                Print Prescription
+                <Printer className="w-4 h-4" />
+                <span>Print Prescription</span>
               </button>
               <button
                 type="submit"
-                className="w-full px-4 py-2 text-white transition-colors duration-200 bg-blue-500 rounded-md hover:bg-blue-700"
+                className="flex-1 px-4 py-3 text-white transition-colors duration-200 bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm flex items-center justify-center gap-2"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Updating..." : "Update Prescription"}
+                <Save className="w-4 h-4" />
+                <span>
+                  {isSubmitting ? "Updating..." : "Update Prescription"}
+                </span>
               </button>
             </div>
           </div>
