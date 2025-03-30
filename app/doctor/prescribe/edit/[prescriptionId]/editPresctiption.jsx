@@ -8,40 +8,6 @@ import { pdf } from "@react-pdf/renderer";
 import PrescriptionPDF from "../../../../components/prescriptionPDF";
 import { useSession } from "next-auth/react";
 
-// Sample suggestions for each section
-const complaintSuggestions = [
-  "Fever",
-  "Headache",
-  "Cough",
-  "Cold",
-  "Body Pain",
-  "Fatigue",
-  "Nausea",
-  "Dizziness",
-];
-
-const treatmentSuggestions = [
-  "Paracetamol",
-  "Antibiotics",
-  "Antihistamine",
-  "Pain Reliever",
-  "Cough Syrup",
-  "Vitamin C",
-  "Rest",
-  "Hydration",
-];
-
-const adviceSuggestions = [
-  "Rest for 3 days",
-  "Drink plenty of water",
-  "Avoid cold foods",
-  "Light exercise",
-  "Regular medication",
-  "Follow-up in a week",
-  "Blood test required",
-  "Avoid stress",
-];
-
 export default function EditPrescription({
   patientId,
   patientData,
@@ -240,7 +206,7 @@ export default function EditPrescription({
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={presetData?.complaintPresets || complaintSuggestions}
+              suggestions={presetData?.complaintPresets}
               onUpdate={(data) => updateFormData("complaints", data)}
             />
             <ExpandableSection
@@ -250,9 +216,7 @@ export default function EditPrescription({
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={
-                presetData?.personalHistoryPresets || complaintSuggestions
-              }
+              suggestions={presetData?.personalHistoryPresets}
               onUpdate={(data) => updateFormData("personalHistory", data)}
             />
             <ExpandableSection
@@ -262,9 +226,7 @@ export default function EditPrescription({
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={
-                presetData?.familyHistoryPresets || complaintSuggestions
-              }
+              suggestions={presetData?.familyHistoryPresets}
               onUpdate={(data) => updateFormData("familyHistory", data)}
             />
             <ExpandableSection
@@ -274,9 +236,7 @@ export default function EditPrescription({
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={
-                presetData?.medicalHistoryPresets || complaintSuggestions
-              }
+              suggestions={presetData?.medicalHistoryPresets}
               onUpdate={(data) => updateFormData("medicalHistory", data)}
             />
             <ExpandableSection
@@ -286,9 +246,7 @@ export default function EditPrescription({
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={
-                presetData?.surgicalHistoryPresets || complaintSuggestions
-              }
+              suggestions={presetData?.surgicalHistoryPresets}
               onUpdate={(data) => updateFormData("surgicalHistory", data)}
             />
             <ExpandableSection
@@ -298,9 +256,7 @@ export default function EditPrescription({
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={
-                presetData?.drugHistoryPresets || complaintSuggestions
-              }
+              suggestions={presetData?.drugHistoryPresets}
               onUpdate={(data) => updateFormData("drugHistory", data)}
             />
             <ExpandableSection
@@ -310,9 +266,7 @@ export default function EditPrescription({
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={
-                presetData?.examFindingPresets || complaintSuggestions
-              }
+              suggestions={presetData?.examFindingPresets}
               onUpdate={(data) => updateFormData("examinationFinding", data)}
             />
             <ExpandableSection
@@ -322,7 +276,7 @@ export default function EditPrescription({
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={presetData?.diagnosisPresets || complaintSuggestions}
+              suggestions={presetData?.diagnosisPresets}
               onUpdate={(data) => updateFormData("diagnosis", data)}
             />
             <ExpandableSection
@@ -332,9 +286,7 @@ export default function EditPrescription({
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={
-                presetData?.managementPlanPresets || complaintSuggestions
-              }
+              suggestions={presetData?.managementPlanPresets}
               onUpdate={(data) => updateFormData("managementPlan", data)}
             />
             <ExpandableSection
@@ -344,9 +296,7 @@ export default function EditPrescription({
                 value: item.value,
               }))}
               defaultExpanded={false}
-              suggestions={
-                presetData?.investigationPresets || complaintSuggestions
-              }
+              suggestions={presetData?.investigationPresets}
               onUpdate={(data) => updateFormData("investigation", data)}
             />
           </div>
@@ -358,6 +308,7 @@ export default function EditPrescription({
                 rule: item.rule,
                 duration: item.duration,
               }))}
+              treatmentSuggestions={presetData?.treatmentPresets}
               onUpdate={(treatments) =>
                 updateFormData("treatments", treatments)
               }
@@ -369,7 +320,7 @@ export default function EditPrescription({
                 value: item.value,
               }))}
               defaultExpanded={true}
-              suggestions={presetData?.advicePresets || adviceSuggestions}
+              suggestions={presetData?.advicePresets}
               onUpdate={(data) => updateFormData("advice", data)}
             />
             <AttachmentBox

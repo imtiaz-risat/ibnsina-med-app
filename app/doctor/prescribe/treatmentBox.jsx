@@ -3,20 +3,8 @@
 import { useState, useEffect } from "react";
 import { FiCheck } from "react-icons/fi";
 
-// Treatment suggestions
-const suggestions = {
-  drugName: [
-    "Paracetamol",
-    "Amoxicillin",
-    "Omeprazole",
-    "Metformin",
-    "Amlodipine",
-    "Losartan",
-    "Ibuprofen",
-    "Cetirizine",
-    "Azithromycin",
-    "Pantoprazole",
-  ],
+// Default suggestions for treatment
+const defaultSuggestions = {
   dose: [
     "500mg",
     "250mg",
@@ -79,7 +67,7 @@ function SectionHeader({
   );
 }
 
-function TreatmentInput({ onAdd }) {
+function TreatmentInput({ onAdd, suggestions }) {
   const [drugName, setDrugName] = useState("");
   const [dose, setDose] = useState("");
   const [rule, setRule] = useState("");
@@ -347,9 +335,21 @@ function TreatmentItem({ item, onEdit, onDelete }) {
   );
 }
 
-function TreatmentBox({ initialItems = [], onUpdate }) {
+function TreatmentBox({
+  initialItems = [],
+  onUpdate,
+  treatmentSuggestions = defaultSuggestions, // Add this prop with default value
+}) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [items, setItems] = useState(initialItems);
+
+  // Use the treatmentSuggestions prop or fall back to default
+  const suggestions = {
+    drugName: treatmentSuggestions,
+    dose: defaultSuggestions.dose,
+    rule: defaultSuggestions.rule,
+    duration: defaultSuggestions.duration,
+  };
 
   const handleAdd = (newItem) => {
     setItems((prevItems) => [...prevItems, newItem]);
@@ -379,7 +379,7 @@ function TreatmentBox({ initialItems = [], onUpdate }) {
       />
       {isExpanded && (
         <div className="p-2 border-t border-blue-200">
-          <TreatmentInput onAdd={handleAdd} />
+          <TreatmentInput onAdd={handleAdd} suggestions={suggestions} />
           <TreatmentList
             items={items}
             onEdit={handleEdit}

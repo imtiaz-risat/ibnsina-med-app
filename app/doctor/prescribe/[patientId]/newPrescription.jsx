@@ -9,40 +9,6 @@ import { pdf } from "@react-pdf/renderer";
 import PrescriptionPDF from "../../../components/prescriptionPDF";
 import { useSession } from "next-auth/react";
 
-// Sample suggestions for each section
-const complaintSuggestions = [
-  "Fever",
-  "Headache",
-  "Cough",
-  "Cold",
-  "Body Pain",
-  "Fatigue",
-  "Nausea",
-  "Dizziness",
-];
-
-const treatmentSuggestions = [
-  "Paracetamol",
-  "Antibiotics",
-  "Antihistamine",
-  "Pain Reliever",
-  "Cough Syrup",
-  "Vitamin C",
-  "Rest",
-  "Hydration",
-];
-
-const adviceSuggestions = [
-  "Rest for 3 days",
-  "Drink plenty of water",
-  "Avoid cold foods",
-  "Light exercise",
-  "Regular medication",
-  "Follow-up in a week",
-  "Blood test required",
-  "Avoid stress",
-];
-
 export default function NewPrescription({
   patientId,
   patientData,
@@ -341,6 +307,7 @@ export default function NewPrescription({
               onUpdate={(treatments) =>
                 updateFormData("treatments", treatments)
               }
+              treatmentSuggestions={presetData.treatmentPresets}
             />
             <ExpandableSection
               title="Advice"
