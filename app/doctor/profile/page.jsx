@@ -2,7 +2,21 @@
 
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { LuUser, LuX, LuCheck } from "react-icons/lu";
+import {
+  LuUser,
+  LuX,
+  LuCheck,
+  LuMail,
+  LuPhone,
+  LuMapPin,
+  LuSave,
+  LuLoader,
+  LuAlertCircle,
+  LuShield,
+  LuCreditCard,
+} from "react-icons/lu";
+import { MdEdit } from "react-icons/md";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function DoctorProfilePage() {
   const { data: session, status } = useSession();
@@ -43,12 +57,14 @@ export default function DoctorProfilePage() {
         } catch (err) {
           console.error("Error fetching doctor data:", err);
           setError(err.message);
+          toast.error("Error loading profile: " + err.message);
         } finally {
           setLoading(false);
         }
       } else if (status === "unauthenticated") {
         setLoading(false);
         setError("You must be logged in to view this page");
+        toast.error("You must be logged in to view this page");
       }
     }
 
@@ -68,6 +84,7 @@ export default function DoctorProfilePage() {
 
     if (!session?.user?.id) {
       setError("User ID not found in session");
+      toast.error("User ID not found in session");
       return;
     }
 
@@ -90,15 +107,11 @@ export default function DoctorProfilePage() {
       const updatedDoctor = await response.json();
       setDoctor(updatedDoctor);
       setIsEditing(false);
-      setSuccessMessage("Profile updated successfully!");
-
-      // Hide success message after 3 seconds
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
+      toast.success("Profile updated successfully!");
     } catch (err) {
       console.error("Error updating profile:", err);
       setError(err.message);
+      toast.error("Error updating profile: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -118,223 +131,287 @@ export default function DoctorProfilePage() {
 
   if (status === "loading" || (loading && !isEditing)) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        {/* <LuLoader2 className="w-10 h-10 animate-spin text-blue-600" /> */}
-        <p className="mt-4 text-xl font-semibold">Loading profile...</p>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+        <LuLoader className="w-12 h-12 animate-spin text-blue-600" />
+        <p className="mt-4 text-xl font-semibold text-gray-700">
+          Loading profile...
+        </p>
       </div>
     );
   }
 
   if (error && !doctor) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <p className="text-xl font-semibold text-red-600">{error}</p>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+        <div className="p-6 bg-white rounded-lg shadow-lg w-full max-w-md flex flex-col items-center">
+          <LuAlertCircle className="w-16 h-16 text-red-500 mb-4" />
+          <p className="text-xl font-semibold text-red-600 text-center">
+            {error}
+          </p>
+        </div>
       </div>
     );
   }
 
   if (!doctor) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <p className="text-xl font-semibold">Doctor profile not found</p>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+        <div className="p-6 bg-white rounded-lg shadow-lg w-full max-w-md flex flex-col items-center">
+          <LuAlertCircle className="w-16 h-16 text-amber-500 mb-4" />
+          <p className="text-xl font-semibold text-gray-700 text-center">
+            Doctor profile not found
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="bg-white shadow-md rounded-lg p-6 max-w-3xl mx-auto">
-        {successMessage && (
-          <div className="mb-4 p-3 bg-green-100 text-green-700 rounded flex items-center">
-            <LuCheck className="mr-2" />
-            {successMessage}
-          </div>
-        )}
+    <div className="min-h-screen">
+      <Toaster position="top-right" />
 
-        {error && isEditing && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded flex items-center">
-            {/* <LuAlertCircle className="mr-2" /> */}
-            {error}
-          </div>
-        )}
-
-        <div className="flex items-center mb-6">
-          <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center mr-6">
-            <LuUser className="w-12 h-12 text-gray-600" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold">
-              Dr. {doctor.firstname} {doctor.lastname}
-            </h1>
-            <p className="text-gray-600">ID: {doctor.id}</p>
-          </div>
-        </div>
-
-        {isEditing ? (
-          <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div>
-                  <h2 className="text-lg font-semibold">
-                    Personal Information
-                  </h2>
-                  <div className="mt-2 space-y-3">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        First Name
-                      </label>
-                      <input
-                        type="text"
-                        name="firstname"
-                        value={formData.firstname}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Last Name
-                      </label>
-                      <input
-                        type="text"
-                        name="lastname"
-                        value={formData.lastname}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                        required
-                      />
-                    </div>
-                    <div className="flex">
-                      <span className="font-medium w-32">Username:</span>
-                      <span>{doctor.username}</span>
-                    </div>
-                    <div className="flex">
-                      <span className="font-medium w-32">Gender:</span>
-                      <span>{doctor.gender}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <h2 className="text-lg font-semibold">Contact Information</h2>
-                  <div className="mt-2 space-y-3">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Phone
-                      </label>
-                      <input
-                        type="text"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Address
-                      </label>
-                      <textarea
-                        name="address"
-                        value={formData.address}
-                        onChange={handleInputChange}
-                        rows="3"
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                        required
-                      ></textarea>
-                    </div>
-                  </div>
-                </div>
+      {/* Header with Doctor Info and Action Button */}
+      <div className="mb-8">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <div className="flex items-center mb-4 md:mb-0">
+            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mr-4 border-2 border-gray-200">
+              <LuUser className="w-10 h-10 text-gray-600" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-800">
+                Dr. {doctor.firstname} {doctor.lastname}
+              </h1>
+              <div className="flex items-center mt-1 text-gray-600">
+                <LuShield className="w-4 h-4 mr-2" />
+                <span className="text-sm flex items-center gap-1">
+                  ID:{" "}
+                  <span className="font-mono bg-gray-100 px-2 py-0.5 rounded text-gray-700">
+                    {doctor.id}
+                  </span>
+                </span>
               </div>
             </div>
+          </div>
 
-            <div className="mt-8 flex space-x-4">
+          {!isEditing ? (
+            <button
+              onClick={() => setIsEditing(true)}
+              className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-sm"
+            >
+              <MdEdit className="w-4 h-4" />
+              <span>Edit Profile</span>
+            </button>
+          ) : (
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={cancelEdit}
+                className="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-all flex items-center justify-center shadow-sm"
+              >
+                <LuX className="w-4 h-4 mr-2" />
+                Cancel
+              </button>
               <button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded flex items-center"
+                form="profileForm"
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all flex items-center justify-center shadow-sm"
                 disabled={loading}
               >
                 {loading ? (
                   <>
-                    {/* <LuLoader2 className="animate-spin mr-2" /> */}
+                    <LuLoader className="w-4 h-4 animate-spin mr-2" />
                     Saving...
                   </>
                 ) : (
                   <>
-                    <LuCheck className="mr-2" />
+                    <LuSave className="w-4 h-4 mr-2" />
                     Save Changes
                   </>
                 )}
               </button>
-              <button
-                type="button"
-                onClick={cancelEdit}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded flex items-center"
-              >
-                <LuX className="mr-2" />
-                Cancel
-              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Profile Content */}
+      <div className="max-w-7xl mx-auto">
+        {isEditing ? (
+          <form id="profileForm" onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Personal Information - First Column */}
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 h-fit">
+                <h2 className="text-lg font-semibold text-gray-800 mb-6 pb-2 border-b border-gray-100 flex items-center">
+                  <LuUser className="mr-2 text-blue-600" />
+                  Personal Information
+                </h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      First Name
+                    </label>
+                    <input
+                      type="text"
+                      name="firstname"
+                      value={formData.firstname}
+                      onChange={handleInputChange}
+                      className="block w-full border border-gray-300 rounded-lg py-2.5 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Last Name
+                    </label>
+                    <input
+                      type="text"
+                      name="lastname"
+                      value={formData.lastname}
+                      onChange={handleInputChange}
+                      className="block w-full border border-gray-300 rounded-lg py-2.5 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                      required
+                    />
+                  </div>
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 mt-6">
+                    <div className="flex items-center">
+                      <span className="font-medium text-gray-700 w-28 flex items-center">
+                        <LuCreditCard className="mr-2 text-blue-500 flex-shrink-0" />
+                        Username:
+                      </span>
+                      <span className="text-gray-900 font-medium">
+                        {doctor.username}
+                      </span>
+                    </div>
+                    <div className="flex items-center mt-3">
+                      <span className="font-medium text-gray-700 w-28 flex items-center">
+                        <LuUser className="mr-2 text-blue-500 flex-shrink-0" />
+                        Gender:
+                      </span>
+                      <span className="text-gray-900 font-medium">
+                        {doctor.gender}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Contact Information - Second Column */}
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 h-fit">
+                <h2 className="text-lg font-semibold text-gray-800 mb-6 pb-2 border-b border-gray-100 flex items-center">
+                  <LuPhone className="mr-2 text-blue-600" />
+                  Contact Information
+                </h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Phone Number
+                    </label>
+                    <input
+                      type="text"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="block w-full border border-gray-300 rounded-lg py-2.5 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Address
+                    </label>
+                    <textarea
+                      name="address"
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      rows="5"
+                      className="block w-full border border-gray-300 rounded-lg py-2.5 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white resize-none"
+                      required
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
             </div>
           </form>
         ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Personal Information */}
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-800 mb-6 pb-2 border-b border-gray-100 flex items-center">
+                <LuUser className="mr-2 text-blue-600" />
+                Personal Information
+              </h2>
               <div className="space-y-4">
-                <div>
-                  <h2 className="text-lg font-semibold">
-                    Personal Information
-                  </h2>
-                  <div className="mt-2 space-y-2">
-                    <div className="flex">
-                      <span className="font-medium w-32">First Name:</span>
-                      <span>{doctor.firstname}</span>
-                    </div>
-                    <div className="flex">
-                      <span className="font-medium w-32">Last Name:</span>
-                      <span>{doctor.lastname}</span>
-                    </div>
-                    <div className="flex">
-                      <span className="font-medium w-32">Username:</span>
-                      <span>{doctor.username}</span>
-                    </div>
-                    <div className="flex">
-                      <span className="font-medium w-32">Gender:</span>
-                      <span>{doctor.gender}</span>
-                    </div>
-                  </div>
+                <div className="flex flex-col md:flex-row md:items-center py-3 px-4 bg-gray-50 rounded-lg">
+                  <span className="font-medium text-gray-700 w-40 flex items-center mb-1 md:mb-0">
+                    <LuUser className="w-5 h-5 mr-2 text-blue-500 flex-shrink-0" />
+                    First Name
+                  </span>
+                  <span className="text-gray-900 font-medium">
+                    {doctor.firstname}
+                  </span>
                 </div>
-              </div>
 
-              <div className="space-y-4">
-                <div>
-                  <h2 className="text-lg font-semibold">Contact Information</h2>
-                  <div className="mt-2 space-y-2">
-                    <div className="flex">
-                      <span className="font-medium w-32">Phone:</span>
-                      <span>{doctor.phone}</span>
-                    </div>
-                    <div className="flex">
-                      <span className="font-medium w-32">Address:</span>
-                      <span>{doctor.address}</span>
-                    </div>
-                  </div>
+                <div className="flex flex-col md:flex-row md:items-center py-3 px-4 bg-gray-50 rounded-lg">
+                  <span className="font-medium text-gray-700 w-40 flex items-center mb-1 md:mb-0">
+                    <LuUser className="w-5 h-5 mr-2 text-blue-500 flex-shrink-0" />
+                    Last Name
+                  </span>
+                  <span className="text-gray-900 font-medium">
+                    {doctor.lastname}
+                  </span>
+                </div>
+
+                <div className="flex flex-col md:flex-row md:items-center py-3 px-4 bg-gray-50 rounded-lg">
+                  <span className="font-medium text-gray-700 w-40 flex items-center mb-1 md:mb-0">
+                    <LuCreditCard className="w-5 h-5 mr-2 text-blue-500 flex-shrink-0" />
+                    Username
+                  </span>
+                  <span className="text-gray-900 font-medium">
+                    {doctor.username}
+                  </span>
+                </div>
+
+                <div className="flex flex-col md:flex-row md:items-center py-3 px-4 bg-gray-50 rounded-lg">
+                  <span className="font-medium text-gray-700 w-40 flex items-center mb-1 md:mb-0">
+                    <LuUser className="w-5 h-5 mr-2 text-blue-500 flex-shrink-0" />
+                    Gender
+                  </span>
+                  <span className="text-gray-900 font-medium">
+                    {doctor.gender}
+                  </span>
                 </div>
               </div>
             </div>
 
-            <div className="mt-8">
-              <button
-                onClick={() => setIsEditing(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
-              >
-                Edit Profile
-              </button>
+            {/* Contact Information */}
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-800 mb-6 pb-2 border-b border-gray-100 flex items-center">
+                <LuPhone className="mr-2 text-blue-600" />
+                Contact Information
+              </h2>
+              <div className="space-y-4">
+                <div className="flex flex-col md:flex-row md:items-center py-3 px-4 bg-gray-50 rounded-lg">
+                  <span className="font-medium text-gray-700 w-40 flex items-center mb-1 md:mb-0">
+                    <LuPhone className="w-5 h-5 mr-2 text-blue-500 flex-shrink-0" />
+                    Phone
+                  </span>
+                  <span className="text-gray-900 font-medium">
+                    {doctor.phone || "Not provided"}
+                  </span>
+                </div>
+
+                <div className="flex flex-col md:flex-row py-3 px-4 bg-gray-50 rounded-lg">
+                  <span className="font-medium text-gray-700 w-40 flex items-start mb-1 md:mb-0 pt-1">
+                    <LuMapPin className="w-5 h-5 mr-2 text-blue-500 flex-shrink-0" />
+                    Address
+                  </span>
+                  <span className="text-gray-900 font-medium">
+                    {doctor.address || "Not provided"}
+                  </span>
+                </div>
+              </div>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
